@@ -15,6 +15,10 @@ const generatedProblemCache = new Map();
 
 export default async function handler(req, res) {
   try {
+    if (req.method === "GET" && req.url.includes("/api/status")) {
+      return res.status(200).json({ configured: !!process.env.MANUS_API_KEY });
+    }
+
     if (req.method === "POST" && req.url.includes("/api/diagnose")) {
       const body = req.body || {};
       const problem = getProblems().find((item) => item.id === body.questionId);

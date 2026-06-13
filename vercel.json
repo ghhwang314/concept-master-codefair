@@ -4,11 +4,11 @@
     { "src": "api/index.js", "use": "@vercel/node" },
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "styles.css", "use": "@vercel/static" },
-    { "src": "src/app.js", "use": "@vercel/static" },
-    { "src": "src/**/*.js", "use": "@vercel/static" },
+    { "src": "src/**/*", "use": "@vercel/static" },
     { "src": "assets/**/*", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/api/status", "dest": "/api/index.js" },
     { "src": "/api/diagnose", "dest": "/api/index.js" },
     { "src": "/api/generate-similar-problem", "dest": "/api/index.js" },
     { "src": "/(.*)", "dest": "/$1" }
