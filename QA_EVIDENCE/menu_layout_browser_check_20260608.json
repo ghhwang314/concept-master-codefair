@@ -1,0 +1,45 @@
+{
+  "errors": [],
+  "results": [
+    {
+      "name": "menu_layout_desktop_1220x1500_20260608",
+      "statusCode": 200,
+      "viewport": {
+        "width": 1220,
+        "height": 1500
+      },
+      "metrics": {
+        "activeScreen": "learn",
+        "dataHidden": true,
+        "researchHidden": true,
+        "detailEvidenceInData": true,
+        "workbenchInLearn": true,
+        "menuTop": 1295,
+        "hasVisibleResearchLink": false,
+        "hasVisibleJsonEvidence": false,
+        "scrollWidth": 1220,
+        "clientWidth": 1220
+      }
+    },
+    {
+      "name": "menu_layout_mobile_390x1200_20260608",
+      "statusCode": 200,
+      "viewport": {
+        "width": 390,
+        "height": 1200
+      },
+      "metrics": {
+        "activeScreen": "learn",
+        "dataHidden": true,
+        "researchHidden": true,
+        "detailEvidenceInData": true,
+        "workbenchInLearn": true,
+        "menuTop": 2214,
+        "hasVisibleResearchLink": false,
+        "hasVisibleJsonEvidence": false,
+        "scrollWidth": 390,
+        "clientWidth": 390
+      }
+    }
+  ]
+}

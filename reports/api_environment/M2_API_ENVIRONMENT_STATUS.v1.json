@@ -1,0 +1,28 @@
+{
+  "schema": "concept_master_m2_api_environment_status.v1",
+  "generated_at": "2026-06-11T23:27:27+09:00",
+  "status": "PASS",
+  "definition": "Manus API configuration is server-only, credit-saving by default, and fallback-safe for local demos.",
+  "issue_count": 0,
+  "issues": [],
+  "checks": {
+    "env_example_placeholder": "PASS",
+    "credit_saver_default": "PASS",
+    "browser_entry_secret_refs": [],
+    "browser_entry_bearer_refs": [],
+    "product_tests": "PASS"
+  },
+  "trace": {
+    "harness_report": "D:\\Codex\\tmp\\geonho_handoff\\concept-master-codefair\\reports\\token_harness\\latest_status.v1.json",
+    "readme": "README.md",
+    "live_verification_note": "LIVE_MANUS_VERIFICATION.md",
+    "api_doc": "docs/API_ENVIRONMENT.md"
+  },
+  "live_boundary": {
+    "publish_upload_delete_browser_write_opened": false,
+    "browser_or_vm_authority_opened": false,
+    "provider_default_changed": false,
+    "training_run_performed": false,
+    "git_stage_commit_push_performed": false
+  }
+}

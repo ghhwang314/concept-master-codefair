@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>작품설명서 - 오답 DNA 지도(ConceptMaster)</title>
+  <style>
+    body {
+      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #1a1b1f;
+      background-color: #f7f9fa;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #ffffff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      border: 1px solid #eef1f4;
+      margin: 20px auto;
+      max-width: 850px;
+    }
+    .nav-item {
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: #4a5568;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95em;
+      transition: all 0.2s;
+    }
+    .nav-item:hover {
+      background: #f1f3f5;
+      color: #1a202c;
+      text-decoration: none;
+    }
+    .nav-item.active {
+      background: #58cc02;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 850px;
+      margin: 20px auto 40px auto;
+      background: #ffffff;
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      border: 1px solid #eef1f4;
+      box-sizing: border-box;
+    }
+    .header-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #eef1f4;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .brand-mark {
+      font-size: 1.5em;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .brand-green { color: #58cc02; }
+    .brand-dark { color: #2c3e50; }
+    .brand-spark { color: #ffc800; margin-left: 4px; }
+    .badge {
+      background: #eef1f4;
+      color: #4a5568;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+    h1, h2, h3, h4 {
+      color: #0c1017;
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      word-break: keep-all;
+    }
+    h1 {
+      font-size: 2em;
+      border-bottom: 3px solid #58cc02;
+      padding-bottom: 12px;
+      margin-top: 0;
+      color: #1b1b1b;
+    }
+    h2 {
+      font-size: 1.5em;
+      color: #1f2d3d;
+      border-bottom: 1px solid #eef1f4;
+      padding-bottom: 8px;
+    }
+    h3 {
+      font-size: 1.2em;
+      color: #2c3e50;
+    }
+    p {
+      margin: 0 0 1.2em;
+      word-break: keep-all;
+    }
+    a {
+      color: #58cc02;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: #46a302;
+      text-decoration: underline;
+    }
+    ul, ol {
+      margin: 0 0 1.5em;
+      padding-left: 24px;
+    }
+    li {
+      margin-bottom: 0.6em;
+      word-break: keep-all;
+    }
+    pre {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      font-size: 0.9em;
+      margin: 1.5em 0;
+      border: 1px solid #334155;
+    }
+    code {
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      background: #f1f3f5;
+      color: #d63384;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+    }
+    blockquote {
+      border-left: 4px solid #58cc02;
+      background: #f2fbf0;
+      margin: 1.5em 0;
+      padding: 12px 20px;
+      color: #2c3e50;
+      border-radius: 0 8px 8px 0;
+    }
+    .alert-box {
+      padding: 16px 20px;
+      margin: 1.5em 0;
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+    .alert-note {
+      background-color: #f0f7ff;
+      border-color: #0070f3;
+      color: #004085;
+    }
+    .alert-note strong { color: #0056b3; }
+    .alert-tip {
+      background-color: #f2fbf0;
+      border-color: #58cc02;
+      color: #2b5c00;
+    }
+    .alert-tip strong { color: #46a302; }
+    .alert-important {
+      background-color: #fef8f0;
+      border-color: #f5a623;
+      color: #664d03;
+    }
+    .alert-important strong { color: #d97706; }
+    .alert-warning {
+      background-color: #fff5f5;
+      border-color: #ff4d4f;
+      color: #721c24;
+    }
+    .alert-warning strong { color: #d9383a; }
+    .alert-caution {
+      background-color: #fff0f1;
+      border-color: #e02424;
+      color: #9b1c1c;
+    }
+    .alert-caution strong { color: #c81e1e; }
+    
+    @media print {
+      body {
+        background-color: #ffffff;
+      }
+      .nav-bar {
+        display: none;
+      }
+      .container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+      .badge {
+        border: 1px solid #ccc;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+<nav class="nav-bar">
+  <a href="./작품요약서_건호_대상형_초안_20260608.html" class="nav-item ">작품요약서</a>
+  <a href="./작품설명서_건호_대상형_초안_20260608.html" class="nav-item active">작품설명서</a>
+  <a href="./심사기준_자가점검_건호_20260608.html" class="nav-item ">심사 자가점검</a>
+  <a href="./붙여넣기_가이드_건호_20260608.html" class="nav-item ">붙여넣기 가이드</a>
+  <a href="../GEONHO_HUMAN_TRIAL_CHECKLIST.html" class="nav-item ">사용성 테스트 체크리스트</a>
+</nav>
+
+  <main class="container">
+    <header class="header-hero">
+      <div class="brand-mark">
+        <span class="brand-green">ConceptMaster</span>
+        <span class="brand-dark">문서</span>
+        <span class="brand-spark">✦</span>
+      </div>
+      <div class="badge">SW공모전 제출 서류</div>
+    </header>
+    <article>
+      <h1>작품설명서 초안 - 심사기준 반영본</h1>
+<p>팀명: AI오답코치랩</p>
+<p>작품명: 오답 DNA 지도(ConceptMaster)</p>
+<p>참가자: 황건호</p>
+<h2>주제</h2>
+<p>초6 수학 반복 오답을 AI와 데이터로 분석하여, 학생이 같은 개념을 다시 틀리지 않도록 돕는 AI 오답 코치</p>
+<h2>심사기준 대응 요약</h2>
+<p>이 작품은 한국코드페어 SW공모전의 애플리케이션 또는 실생활에 유용한 도구 개발 유형에 맞추어 정리했다.</p>
+<ol>
+  <li>개발 목적: 반복 오답과 개념 이해 부족이라는 실제 학습 문제를 해결한다.</li>
+  <li>설계와 방법론: 오답을 <code>attempt_log</code>와 <code>concept_summary</code>로 저장하고, AI 진단과 같은 개념 재도전으로 연결한다.</li>
+  <li>구현 및 유용성: 초6 수학 대표문항 6개, 심사용 30초 데모, 대시보드, 데이터 화면, Manus API/fallback 구조가 구현되어 있다.</li>
+  <li>창의성: 정답 제공 중심이 아니라 오답 원인, 오개념 데이터, 재도전 성공 여부를 하나의 &quot;오답 DNA&quot;로 보여준다.</li>
+  <li>제출 자료: 작품요약서, 작품설명서, 테스트 결과, 데이터 구조, 발표용 설명을 같은 흐름으로 맞추었다.</li>
+</ol>
+<h2>1. 개발 배경 및 필요성</h2>
+<p>수학을 공부하다 보면 문제를 틀린 뒤 정답과 해설을 보고 넘어가도, 며칠 뒤 비슷한 개념에서 또 틀리는 경우가 있다. 특히 초6 수학의 분수 통분, 분수 덧셈, 비율처럼 여러 단계를 거쳐야 하는 문제는 계산만 틀린 것인지, 개념을 잘못 이해한 것인지, 문제 조건을 잘못 읽은 것인지 학생 혼자 구별하기 어렵다.</p>
+<p>기존 문제풀이 앱은 대부분 문제를 풀고 정답과 해설을 보여주는 데 집중한다. 하지만 학생에게 더 필요한 것은 &quot;정답이 무엇인가&quot;뿐 아니라 &quot;내가 왜 이런 선택을 했고, 어떤 개념을 다시 공부해야 하는가&quot;이다. 이 작품은 이 문제를 해결하기 위해 만들었다. 오답을 그냥 틀린 기록으로 버리지 않고, 개념과 오개념 데이터로 저장한 뒤 AI가 원인을 진단하고 같은 개념의 재도전 문제로 다시 확인하게 한다.</p>
+<p>이 주제는 한국코드페어 SW공모전의 &quot;AI와 데이터로 해결하는 우리 사회의 문제&quot;와도 잘 맞는다. 반복 오답과 학습 격차는 많은 학생이 겪는 실제 문제이고, 이 작품은 학생의 풀이 데이터를 바탕으로 AI가 개인별 약점 개념을 찾아주는 방식으로 해결하려고 한다.</p>
+<p>작품 작동의 제약도 고려했다. AI API는 느리거나 실패할 수 있고, AI가 생성한 문제가 항상 정확하다고 볼 수도 없다. 그래서 Manus API가 실패해도 규칙 기반 fallback과 템플릿 문제로 데모가 이어지게 했고, 생성 문항은 사람 검수 전까지 <code>needs_review</code> 상태로 표시했다.</p>
+<h2>2. 개발 주제와 목적</h2>
+<p>이 작품의 목적은 단순한 퀴즈 프로그램이 아니라, 오답을 분석하고 재학습을 돕는 AI 오답 코치 시스템을 만드는 것이다.</p>
+<p>첫째, 학생의 풀이 기록을 데이터로 저장한다. 문제 ID, 개념 ID, 오개념 ID, 선택한 답, 정답 여부, AI 진단 출처, 다음 복습일을 <code>attempt_log</code>에 기록한다.</p>
+<p>둘째, 오답을 개념 단위로 정리한다. <code>concept_summary</code>에는 개념별 풀이 횟수, 오답률, 대표 오개념, 재도전 성공 여부, 복습 예정일이 저장된다. 이를 통해 학생은 자신이 어느 개념에서 반복해서 틀리는지 볼 수 있다.</p>
+<p>셋째, AI가 오답 이유를 설명한다. Manus API 또는 규칙 기반 fallback이 학생의 오답을 보고 &quot;분모를 같게 만들지 않았다&quot;, &quot;조건을 잘못 해석했다&quot;, &quot;계산 과정에서 실수했다&quot;처럼 원인을 설명한다.</p>
+<p>넷째, 같은 개념을 다시 풀게 한다. 오답 후 바로 다른 단원으로 넘어가지 않고, 같은 개념의 재도전 문제를 추천하거나 생성한다. 재도전 결과를 다시 저장하여 이해가 회복되었는지 확인한다.</p>
+<p>다섯째, 심사위원과 사용자가 데이터 증거를 볼 수 있게 한다. 대시보드에는 반복 오답 개념, 오늘 복습할 개념, 오답 원인 분포, 재학습 후 변화, 문제 데이터 QA가 표시된다.</p>
+<h2>3. 설계와 방법론</h2>
+<p>작품은 다음 흐름으로 작동한다.</p>
+<ol>
+  <li>학생이 초6 수학 문제를 푼다.</li>
+  <li>앱이 정답 여부와 개념 정보를 <code>attempt_log</code>에 저장한다.</li>
+  <li>오답이면 AI 또는 fallback이 오답 원인을 진단한다.</li>
+  <li>앱이 같은 개념의 재도전 문제를 추천하거나 생성한다.</li>
+  <li>학생이 재도전 문제를 푼다.</li>
+  <li>앱이 재도전 성공 여부를 다시 저장한다.</li>
+  <li><code>concept_summary</code>가 개념별 오답률, 대표 오개념, 복습 일정을 갱신한다.</li>
+  <li>대시보드와 데이터 화면에서 학습 변화가 보인다.</li>
+</ol>
+<p>데이터는 세 종류로 구분했다. <code>demo_seed</code>는 시작 예시 데이터, <code>judge_demo</code>는 심사용 데모에서 만들어지는 데이터, <code>human_trial</code>은 실제 학생 사용 후 기록할 데이터이다. 이렇게 나누면 예시 데이터와 실제 사용 데이터를 섞지 않고, 어떤 결과가 실제 사용에서 나온 것인지 분명히 구분할 수 있다.</p>
+<p>기술적으로는 HTML, CSS, JavaScript, Node 서버로 구성되어 있고, AI 기능은 Manus API를 사용할 수 있게 연결했다. 다만 발표 연습과 심사 데모에서 API 크레딧을 낭비하지 않도록 기본은 크레딧 절약 모드로 동작한다. 사용자가 <code>AI 1회 사용</code>을 누른 경우에만 live AI 요청을 보내고, 그 외에는 규칙 기반 진단과 템플릿 문제로 같은 흐름이 유지된다.</p>
+<p>개발 일정은 네 단계로 나누었다. 1단계는 초6 수학 문제 은행과 개념 태그 정리, 2단계는 오답 기록과 대시보드 구현, 3단계는 Manus API/fallback 진단과 같은 개념 재도전 구현, 4단계는 테스트와 심사용 데모, 제출 문서 정리이다. 개인 참가 작품이므로 역할 배분은 한 명이 기획, 화면 구성, 기능 테스트, 발표 설명을 모두 맡는 형태로 정리한다.</p>
+<h2>4. AI와 데이터 활용</h2>
+<p>AI 활용은 세 부분이다.</p>
+<p>첫째, 오답 원인 진단이다. 학생의 선택 답안과 문제 정보를 바탕으로 어떤 개념을 오해했는지 설명한다.</p>
+<p>둘째, 같은 개념 재도전 문제 추천 또는 생성이다. 학생이 틀린 개념을 다시 확인할 수 있도록 관련 문제를 제시한다.</p>
+<p>셋째, 학습 조언 생성이다. 학생에게 오늘 어떤 개념을 복습해야 하는지, 왜 그 개념이 약점으로 잡혔는지 설명한다.</p>
+<p>데이터 활용은 네 부분이다.</p>
+<p>첫째, <code>attempt_log</code>로 모든 풀이 시도를 저장한다.</p>
+<p>둘째, <code>concept_summary</code>로 개념별 약점을 계산한다.</p>
+<p>셋째, 오답률과 재도전 성공 여부로 학습 개선을 확인한다.</p>
+<p>넷째, <code>demo_seed</code>, <code>judge_demo</code>, <code>human_trial</code>을 구분하여 예시 데이터, 심사용 데모 데이터, 실제 학생 사용 데이터를 분리한다.</p>
+<p>이 구조 덕분에 심사위원은 화면에서 AI가 만든 말뿐 아니라, AI 판단의 근거가 되는 데이터와 재도전 결과를 함께 확인할 수 있다.</p>
+<h2>5. 유사 제품 및 차별점</h2>
+<p>유사한 문제풀이 앱이나 온라인 학습 서비스는 정답, 해설, 점수 표시를 제공한다. 그러나 이런 방식은 학생이 왜 반복해서 같은 개념을 틀리는지 추적하기 어렵다. 정답을 보고 넘어가면 그 순간에는 이해한 것 같아도, 비슷한 문제에서 다시 틀릴 수 있다.</p>
+<p>오답 DNA 지도는 이 부분이 다르다.</p>
+<p>첫째, 정답 중심이 아니라 오답 원인 중심이다. 문제를 맞혔는지보다 어떤 개념에서 왜 틀렸는지를 더 중요하게 다룬다.</p>
+<p>둘째, AI 진단이 데이터와 연결된다. AI가 그냥 설명을 만들어 주는 것이 아니라 <code>attempt_log</code>와 <code>concept_summary</code>에 기록된 개념 데이터를 바탕으로 약점을 보여준다.</p>
+<p>셋째, 같은 개념 재도전이 있다. 틀린 뒤에 바로 다른 문제로 넘어가지 않고, 같은 개념을 다시 풀어 실제로 이해가 회복되었는지 확인한다.</p>
+<p>넷째, AI 실패에도 멈추지 않는다. Manus API가 느리거나 실패해도 fallback 진단과 템플릿 문제가 작동하므로 심사 데모와 학습 흐름이 유지된다.</p>
+<p>다섯째, 생성 문항을 무조건 정답으로 믿지 않는다. AI 또는 fallback이 만든 문제는 <code>needs_review</code> 상태로 표시하여 사람이 검수해야 한다는 한계를 분명히 둔다. 이 점은 안심톡 최종 제품본에서 참고한 &quot;AI 결과는 도움 자료이고 검증이 필요하다&quot;는 원칙을 학습 서비스에 맞게 적용한 것이다.</p>
+<h2>6. 구현 및 유용성</h2>
+<p>현재 구현된 기능은 다음과 같다.</p>
+<ol>
+  <li>초6 수학 대표문항 6개와 문제 은행 QA</li>
+  <li>오답 선택 및 풀이 기록 저장</li>
+  <li>오답 원인 진단</li>
+  <li>같은 개념 재도전 문제 추천 또는 생성</li>
+  <li>개념별 오답률과 대표 오개념 계산</li>
+  <li>오늘 복습할 개념 추천</li>
+  <li>오답 원인 분포와 재학습 후 변화 표시</li>
+  <li>Manus API/fallback 상태 표시</li>
+  <li>생성 문항 <code>needs_review</code> 표시</li>
+  <li>30초 심사용 데모 흐름</li>
+</ol>
+<p>이 기능들은 모두 &quot;반복 오답을 줄인다&quot;는 개발 목적에 맞추어 연결되어 있다. 심사위원은 데모 버튼을 누른 뒤 오답 기록, AI 진단, 같은 개념 재도전, 개선률 표시, 데이터 화면까지 한 번에 확인할 수 있다.</p>
+<h2>7. 작품 테스트</h2>
+<h3>7-1. 테스트 목적</h3>
+<p>테스트의 목적은 이 작품이 단순히 문제를 보여주는 수준이 아니라, 오답 기록, AI 진단, 같은 개념 재도전, 대시보드 계산, API 실패 대응, 보안 경계까지 안정적으로 작동하는지 확인하는 것이다.</p>
+<h3>7-2. 테스트 방법</h3>
+<p>첫째, 문제 은행에 필요한 정보가 들어 있는지 확인했다. 문제 ID, 개념 ID, 선택지, 정답, 해설, 난이도, 오개념 태그가 있어야 한다.</p>
+<p>둘째, 오답을 선택했을 때 <code>attempt_log</code>가 만들어지는지 확인했다.</p>
+<p>셋째, 오답 후 AI 진단 또는 fallback 진단이 나타나는지 확인했다.</p>
+<p>넷째, 같은 개념의 재도전 문제가 추천 또는 생성되는지 확인했다.</p>
+<p>다섯째, 재도전 결과가 <code>concept_summary</code>에 반영되어 오답률, 대표 오개념, 재도전 성공 여부, 복습 일정이 갱신되는지 확인했다.</p>
+<p>여섯째, Manus API가 느리거나 실패해도 앱이 멈추지 않고 fallback으로 완료되는지 확인했다.</p>
+<p>일곱째, API 키가 브라우저 파일이나 화면에 노출되지 않는지 확인했다.</p>
+<p>여덟째, 심사용 데모가 30초 안에 &quot;오답 기록 -&gt; AI 진단 -&gt; 같은 개념 재도전 -&gt; 개선률 표시 -&gt; 데이터 확인&quot; 흐름을 보여주는지 확인했다.</p>
+<h3>7-3. 예상 결과</h3>
+<p>정상적으로 작동한다면 오답이 발생했을 때 기록이 저장되고, 앱은 오답 원인을 분석한 뒤 같은 개념 문제를 제시해야 한다. 대시보드에는 자주 틀린 개념, 오늘 복습할 개념, 오답 원인 분포, 재학습 후 변화가 보여야 한다. AI 응답이 없을 때도 앱이 멈추지 않고 기본 진단 결과를 보여야 한다.</p>
+<h3>7-4. 실제 결과</h3>
+<p>현재 자동 테스트 결과는 44개 통과, 0개 실패이다. 확인된 항목은 문제 은행 검증, 학습 기록 저장, 같은 개념 재도전, 대시보드 계산, 오답 원인 분포, 복습 추천, DTT 추적, 30초 데모 계약, Manus API 실패 시 fallback 처리, API 키 비노출, 15분 인수인계 계약, M6 인간 검증 게이트이다.</p>
+<p>추가로 브라우저에서 실제 M3 흐름을 확인했다. 학생이 <code>1/3 + 1/4</code> 문제에서 오답을 선택하면 앱은 규칙 진단으로 &quot;분모끼리 바로 더하는 오개념&quot;을 설명하고, 같은 개념 재도전 문제를 제시한다. 재도전 문제를 맞히면 이전 오답이 <code>회복</code>으로 표시되고, 데이터 화면의 전후 변화 카드에는 오답 전 4개, 회복 후 2개, 개선률 50%가 표시되었다. 이 증거는 <code>QA_EVIDENCE/m3_retry_success_browser_check_20260608.json</code>에 저장되어 있다.</p>
+<p>실제 live Manus 검증에서는 유사문항 생성이 Manus API 경로로 완료된 기록이 있고, 진단은 fallback으로 완료된 기록이 있다. 그래서 제출 문서와 발표에서는 &quot;모든 단계가 항상 Manus API로 성공한다&quot;고 말하지 않고, &quot;Manus API와 fallback을 모두 갖춘 AI 오답 코치&quot;라고 설명하는 것이 정확하다.</p>
+<h3>7-5. 결과 분석</h3>
+<p>테스트 결과, 이 작품은 초6 수학 오답을 데이터로 저장하고, AI 또는 fallback 진단으로 오답 이유를 설명하며, 같은 개념 재도전으로 이해 회복 여부를 확인하는 핵심 흐름을 갖추었다. 특히 심사위원이 볼 수 있는 화면에 <code>attempt_log</code>, <code>concept_summary</code>, 오답률, 개선률, 오늘 복습할 개념이 표시되므로 AI와 데이터 활용이 말로만 존재하지 않고 화면 증거로 보인다.</p>
+<p>다만 아직 실제 학생 여러 명이 장기간 사용한 결과는 없다. 따라서 장기 학습 효과를 이미 증명했다고 말하면 안 된다. 현재 단계에서 증명한 것은 자동 테스트와 심사용 데모 흐름이며, 실제 사용 효과는 <code>human_trial</code> 데이터를 모아 추가로 확인해야 한다.</p>
+<h2>8. 창의성</h2>
+<p>이 작품의 창의성은 문제를 많이 만드는 데 있지 않고, 틀린 이유와 다시 이해했는지를 하나의 학습 흐름으로 묶은 데 있다. &quot;오답 DNA&quot;라는 이름처럼, 한 번의 오답을 개념 ID, 오개념 ID, AI 진단, 재도전 결과, 복습 일정으로 나누어 보여준다.</p>
+<p>또한 AI를 단순 챗봇으로 쓰지 않고, 데이터와 연결된 진단 도구로 사용한다. AI가 오답 이유를 설명하더라도 그 결과를 바로 정답처럼 확정하지 않고, 데이터 화면과 재도전 결과, <code>needs_review</code> 표시로 검증 가능하게 만들었다.</p>
+<h2>9. 제출 자료와 출처</h2>
+<p>제출 자료는 작품요약서, 작품설명서, 실행 가능한 웹앱, 30초 심사용 데모, 테스트 결과, 발표용 설명으로 구성한다. 화면에서는 오답 DNA 지도, 오답 원인 분포, 오늘 복습할 개념, 데이터 QA, <code>attempt_log</code>, <code>concept_summary</code>를 확인할 수 있다.</p>
+<p>참고한 자료와 기준은 다음과 같다.</p>
+<ol>
+  <li>한국코드페어 SW공모전 공식 주제와 제출 안내</li>
+  <li>한국코드페어 SW공모전 심사기준표의 개발 목적, 설계와 방법론, 구현 및 유용성, 창의성, 제출 자료 기준</li>
+  <li>안심톡 최종 제품본의 AI 보조, 검증, 한계 명시 구조</li>
+  <li>ConceptMaster 현재 구현 파일과 자동 테스트 결과</li>
+</ol>
+<h2>10. 위험성 검토</h2>
+<p>이 작품은 학생의 민감한 개인정보를 입력받는 구조가 아니다. 제출용 MVP에서는 초6 수학 대표문항과 데모 데이터를 중심으로 작동한다. API 키는 브라우저에 노출하지 않고 서버 환경 변수에서만 사용한다. 생성 문항은 사람 검수 전까지 <code>needs_review</code>로 표시하며, AI 결과가 틀릴 수 있다는 한계를 문서와 화면에서 분리한다.</p>
+<h2>11. 기대 효과</h2>
+<p>첫째, 학생은 자신이 어떤 개념을 반복해서 틀리는지 쉽게 확인할 수 있다.</p>
+<p>둘째, 정답만 보는 공부에서 벗어나 오답 이유를 이해하고 같은 개념을 다시 풀어볼 수 있다.</p>
+<p>셋째, 보호자나 선생님은 학생이 많이 틀리는 개념과 오늘 복습할 내용을 빠르게 볼 수 있다.</p>
+<p>넷째, AI를 단순한 챗봇이나 문제 생성기로 쓰는 것이 아니라, 오답 데이터 분석과 학습 회복 확인에 사용한다는 점에서 교육적 의미가 있다.</p>
+<p>다섯째, 앞으로 실제 학생 데이터를 더 모으면 개인별 오개념 패턴을 더 정확하게 분석하고, 단원별 맞춤 복습 시스템으로 확장할 수 있다.</p>
+<h2>12. 한계와 향후 계획</h2>
+<p>현재 버전은 제출용 MVP로, 초6 수학 대표문항 6개와 심사용 데모 흐름을 중심으로 구현되어 있다. 실제 학생 장기 사용 데이터는 아직 충분하지 않다. 또한 AI 또는 fallback이 만든 문제는 사람 검수 전까지 <code>needs_review</code> 상태로 두어야 한다.</p>
+<p>향후에는 실제 학생 풀이 데이터를 더 모아 오개념 분류 정확도를 높이고, 초6 수학 단원별 문제 수를 늘리며, 교사용 검수 화면을 추가할 계획이다. 또한 학생이 재도전 후 자신의 말로 오답 이유를 설명하는 기능을 추가하면, 단순히 다시 맞힌 것인지 실제로 이해한 것인지 더 잘 확인할 수 있다.</p>
+<h2>13. 발표용 한 줄 설명</h2>
+<p>오답 DNA 지도는 정답만 알려주는 퀴즈앱이 아니라, 내가 왜 자꾸 틀리는지 오답 데이터를 모아 AI가 진단하고 같은 개념 재도전으로 다시 이해했는지 확인하는 초6 수학 AI 오답 코치입니다.</p>
+
+    </article>
+  </main>
+</body>
+</html>

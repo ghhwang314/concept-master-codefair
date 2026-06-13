@@ -1,0 +1,17 @@
+{
+  "name": "concept-master-codefair",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "start": "node src/server.mjs",
+    "package:handoff": "node scripts/package_handoff.js",
+    "package:smoke": "python scripts/smoke_handoff_zip.py",
+    "trial:prepare": "python scripts/prepare_human_trial_record.py",
+    "trial:start": "python scripts/start_human_trial.py",
+    "trial:status": "python scripts/status_human_trial.py",
+    "trial:validate-template": "python scripts/validate_human_trial_record.py --record trial_records/human_trial_record.template.v1.json --mode template",
+    "trial:validate": "python scripts/validate_human_trial_record.py --mode trial"
+  }
+}

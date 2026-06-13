@@ -1,0 +1,44 @@
+{
+  "schema": "concept_master_human_trial_record.v1",
+  "record_status": "RECORDED",
+  "human_verified": false,
+  "baseline": {
+    "expected_auto_verified_baseline": "44 PASS / 0 FAIL",
+    "harness_report": "reports/token_harness/latest_status.v1.json"
+  },
+  "run": {
+    "date_time": "2026-06-11T09:25:17+09:00",
+    "tester": "Geonho",
+    "npm_test_result": "",
+    "browser_load_result": "",
+    "ai_status_top_bar": ""
+  },
+  "demo": {
+    "demo_reached_data_screen": "",
+    "improvement_rate_shown": "",
+    "attempt_log_shown": "",
+    "concept_summary_shown": "",
+    "recommendation_trace_shown": "",
+    "problem_bank_qa_shown": "",
+    "generated_problem_qa_notice_shown_when_needed": ""
+  },
+  "explanation": {
+    "why_features_were_built": "",
+    "what_changed_after_wrong_answer": "",
+    "what_ai_helped_with": "",
+    "why_retry_uses_same_concept": "",
+    "what_data_screen_proves": ""
+  },
+  "manus_and_fallback": {
+    "manus_diagnosis_source_if_visible": "",
+    "generated_retry_problem_source_if_visible": "",
+    "fallback_demo_finished": "",
+    "needs_review_or_qa_issue_shown": ""
+  },
+  "issues": [],
+  "final": {
+    "human_trial_decision": "",
+    "reason": "",
+    "next_one_action": ""
+  }
+}

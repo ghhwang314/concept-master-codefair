@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한국코드페어 심사기준 자가점검</title>
+  <style>
+    body {
+      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #1a1b1f;
+      background-color: #f7f9fa;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #ffffff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      border: 1px solid #eef1f4;
+      margin: 20px auto;
+      max-width: 850px;
+    }
+    .nav-item {
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: #4a5568;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95em;
+      transition: all 0.2s;
+    }
+    .nav-item:hover {
+      background: #f1f3f5;
+      color: #1a202c;
+      text-decoration: none;
+    }
+    .nav-item.active {
+      background: #58cc02;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 850px;
+      margin: 20px auto 40px auto;
+      background: #ffffff;
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      border: 1px solid #eef1f4;
+      box-sizing: border-box;
+    }
+    .header-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #eef1f4;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .brand-mark {
+      font-size: 1.5em;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .brand-green { color: #58cc02; }
+    .brand-dark { color: #2c3e50; }
+    .brand-spark { color: #ffc800; margin-left: 4px; }
+    .badge {
+      background: #eef1f4;
+      color: #4a5568;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+    h1, h2, h3, h4 {
+      color: #0c1017;
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      word-break: keep-all;
+    }
+    h1 {
+      font-size: 2em;
+      border-bottom: 3px solid #58cc02;
+      padding-bottom: 12px;
+      margin-top: 0;
+      color: #1b1b1b;
+    }
+    h2 {
+      font-size: 1.5em;
+      color: #1f2d3d;
+      border-bottom: 1px solid #eef1f4;
+      padding-bottom: 8px;
+    }
+    h3 {
+      font-size: 1.2em;
+      color: #2c3e50;
+    }
+    p {
+      margin: 0 0 1.2em;
+      word-break: keep-all;
+    }
+    a {
+      color: #58cc02;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: #46a302;
+      text-decoration: underline;
+    }
+    ul, ol {
+      margin: 0 0 1.5em;
+      padding-left: 24px;
+    }
+    li {
+      margin-bottom: 0.6em;
+      word-break: keep-all;
+    }
+    pre {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      font-size: 0.9em;
+      margin: 1.5em 0;
+      border: 1px solid #334155;
+    }
+    code {
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      background: #f1f3f5;
+      color: #d63384;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+    }
+    blockquote {
+      border-left: 4px solid #58cc02;
+      background: #f2fbf0;
+      margin: 1.5em 0;
+      padding: 12px 20px;
+      color: #2c3e50;
+      border-radius: 0 8px 8px 0;
+    }
+    .alert-box {
+      padding: 16px 20px;
+      margin: 1.5em 0;
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+    .alert-note {
+      background-color: #f0f7ff;
+      border-color: #0070f3;
+      color: #004085;
+    }
+    .alert-note strong { color: #0056b3; }
+    .alert-tip {
+      background-color: #f2fbf0;
+      border-color: #58cc02;
+      color: #2b5c00;
+    }
+    .alert-tip strong { color: #46a302; }
+    .alert-important {
+      background-color: #fef8f0;
+      border-color: #f5a623;
+      color: #664d03;
+    }
+    .alert-important strong { color: #d97706; }
+    .alert-warning {
+      background-color: #fff5f5;
+      border-color: #ff4d4f;
+      color: #721c24;
+    }
+    .alert-warning strong { color: #d9383a; }
+    .alert-caution {
+      background-color: #fff0f1;
+      border-color: #e02424;
+      color: #9b1c1c;
+    }
+    .alert-caution strong { color: #c81e1e; }
+    
+    @media print {
+      body {
+        background-color: #ffffff;
+      }
+      .nav-bar {
+        display: none;
+      }
+      .container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+      .badge {
+        border: 1px solid #ccc;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+<nav class="nav-bar">
+  <a href="./작품요약서_건호_대상형_초안_20260608.html" class="nav-item ">작품요약서</a>
+  <a href="./작품설명서_건호_대상형_초안_20260608.html" class="nav-item ">작품설명서</a>
+  <a href="./심사기준_자가점검_건호_20260608.html" class="nav-item active">심사 자가점검</a>
+  <a href="./붙여넣기_가이드_건호_20260608.html" class="nav-item ">붙여넣기 가이드</a>
+  <a href="../GEONHO_HUMAN_TRIAL_CHECKLIST.html" class="nav-item ">사용성 테스트 체크리스트</a>
+</nav>
+
+  <main class="container">
+    <header class="header-hero">
+      <div class="brand-mark">
+        <span class="brand-green">ConceptMaster</span>
+        <span class="brand-dark">문서</span>
+        <span class="brand-spark">✦</span>
+      </div>
+      <div class="badge">SW공모전 제출 서류</div>
+    </header>
+    <article>
+      <h1>한국코드페어 심사기준 자가점검</h1>
+<p>기준: SW공모전 애플리케이션 또는 실생활에 유용한 도구 개발 유형의 공개 심사기준 구조</p>
+<h2>1. 개발 목적 / 20점</h2>
+<p>상태: 강함</p>
+<p>문서 반영 위치:</p>
+<ul>
+  <li>작품요약서: 첫 문단</li>
+  <li>작품설명서: <code>1. 개발 배경 및 필요성</code>, <code>2. 개발 주제와 목적</code></li>
+</ul>
+<p>강점:</p>
+<ul>
+  <li>반복 오답과 개념 이해 부족을 실제 학습 문제로 정의했다.</li>
+  <li>코드페어 주제인 AI와 데이터 활용을 첫 문단에서 바로 연결했다.</li>
+  <li>AI API 실패와 생성 문항 검수 문제를 제약으로 인정했다.</li>
+</ul>
+<p>남은 리스크:</p>
+<ul>
+  <li>실제 학생 장기 데이터가 아직 적다. 발표에서는 장기 효과를 증명했다고 말하지 않는다.</li>
+</ul>
+<h2>2. 설계와 방법론 / 20점</h2>
+<p>상태: 강함</p>
+<p>문서 반영 위치:</p>
+<ul>
+  <li>작품설명서: <code>3. 설계와 방법론</code>, <code>4. AI와 데이터 활용</code></li>
+</ul>
+<p>강점:</p>
+<ul>
+  <li><code>오답 기록 -&gt; AI 진단 -&gt; 같은 개념 재도전 -&gt; 개선 확인</code> 흐름이 명확하다.</li>
+  <li><code>attempt_log</code>, <code>concept_summary</code>, <code>demo_seed</code>, <code>judge_demo</code>, <code>human_trial</code> 데이터 구분이 들어갔다.</li>
+  <li>개인 참가자 기준 개발 일정이 정리되어 있다.</li>
+</ul>
+<p>남은 리스크:</p>
+<ul>
+  <li>발표에서 데이터 필드 이름만 말하면 어려워 보일 수 있다. 건호는 &quot;틀린 기록표&quot;와 &quot;개념별 약점표&quot;처럼 쉽게 풀어 말해야 한다.</li>
+</ul>
+<h2>3. 구현 및 유용성 / 20점</h2>
+<p>상태: 강함</p>
+<p>문서 반영 위치:</p>
+<ul>
+  <li>작품설명서: <code>6. 구현 및 유용성</code>, <code>7. 작품 테스트</code></li>
+</ul>
+<p>강점:</p>
+<ul>
+  <li>초6 수학 대표문항 6개, 30초 데모, 대시보드, 데이터 화면이 구현되어 있다.</li>
+  <li><code>npm test</code> 기준 44 PASS / 0 FAIL이다.</li>
+  <li>Manus API가 실패해도 fallback으로 흐름이 유지된다.</li>
+</ul>
+<p>남은 리스크:</p>
+<ul>
+  <li>실제 HWP 제출 전에는 화면 시연을 한 번 더 사람이 직접 확인해야 한다. 현재는 Auto-Verified이고 Human-Verified는 아직 아니다.</li>
+</ul>
+<h2>4. 창의성 / 20점</h2>
+<p>상태: 강함</p>
+<p>문서 반영 위치:</p>
+<ul>
+  <li>작품요약서: 차별점 문단</li>
+  <li>작품설명서: <code>5. 유사 제품 및 차별점</code>, <code>8. 창의성</code></li>
+</ul>
+<p>강점:</p>
+<ul>
+  <li>일반 문제풀이 앱과 달리 오답 원인, 오개념 데이터, 재도전 성공 여부를 연결했다.</li>
+  <li>&quot;오답 DNA&quot;라는 이름이 기능과 잘 맞는다.</li>
+  <li>AI를 단순 문제 생성기가 아니라 데이터와 연결된 오답 코치로 썼다.</li>
+</ul>
+<p>남은 리스크:</p>
+<ul>
+  <li>친구 기능, XP, 꾸미기 요소가 심사 핵심처럼 보이면 점수가 흐려진다. 발표에서는 오답 데이터와 AI 진단을 먼저 보여준다.</li>
+</ul>
+<h2>5. 제출 자료 / 20점</h2>
+<p>상태: 보통에서 강함</p>
+<p>문서 반영 위치:</p>
+<ul>
+  <li>작품설명서: <code>9. 제출 자료와 출처</code>, <code>10. 위험성 검토</code></li>
+  <li>붙여넣기 가이드: 심사기준 체크</li>
+</ul>
+<p>강점:</p>
+<ul>
+  <li>작품요약서와 작품설명서가 같은 메시지로 정리되었다.</li>
+  <li>출처와 참고 기준, 위험성 검토가 들어갔다.</li>
+  <li>화면에서 데이터 QA와 그래프/분포가 보이도록 설명했다.</li>
+</ul>
+<p>남은 리스크:</p>
+<ul>
+  <li>HWP에 붙여 넣은 뒤 표, 줄바꿈, 그래픽 캡처가 빠지면 제출 자료 점수가 깎일 수 있다.</li>
+</ul>
+<h2>최종 제출 전 3개 체크</h2>
+<ol>
+  <li>건호가 30초 데모를 직접 실행하고 &quot;오답 기록 -&gt; AI 진단 -&gt; 재도전 -&gt; 개선률&quot;을 말할 수 있어야 한다.</li>
+  <li>작품설명서에 화면 캡처를 넣는다면 <code>오답 DNA 지도</code>, <code>오답 원인 분포</code>, <code>데이터 QA</code> 화면을 우선 넣는다.</li>
+  <li>Human-Verified라고 쓰려면 <code>GEONHO_HUMAN_TRIAL_CHECKLIST.md</code>를 실제로 채워야 한다.</li>
+</ol>
+
+    </article>
+  </main>
+</body>
+</html>

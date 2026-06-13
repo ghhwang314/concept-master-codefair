@@ -1,0 +1,129 @@
+{
+  "schema": "concept_master_handoff_zip_smoke.v1",
+  "generated_at": "2026-06-13T13:55:57+09:00",
+  "status": "FAIL",
+  "zip_path": "D:\\Codex\\tmp\\geonho_handoff\\concept-master-codefair\\dist\\concept-master-codefair-geonho-m6-handoff-20260613-1355.zip",
+  "extracted_project_root_name": "concept-master-codefair",
+  "required_extracted": [
+    "package.json",
+    "README.md",
+    "HANDOFF_GEONHO.md",
+    ".env.example",
+    "index.html",
+    "scripts/prepare_human_trial_record.py",
+    "scripts/start_human_trial.py",
+    "scripts/status_human_trial.py",
+    "scripts/validate_human_trial_record.py",
+    "trial_records/human_trial_record.template.v1.json",
+    "src/server.mjs",
+    "src/app.js",
+    "tests/concept-master.test.mjs"
+  ],
+  "forbidden_extracted": [
+    ".env",
+    "server.err.log",
+    "server.out.log"
+  ],
+  "commands": [
+    {
+      "name": "npm_test_extracted",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-13T13:55:33+09:00",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "test"
+      ],
+      "stdout_tail": "evidence separates demo_seed, judge_demo, and human_trial logs on the data screen (4.2218ms)\n✔ dashboard metrics expose concept error rate, reason distribution, repeated mistakes, and improvement (1.0977ms)\n✔ dashboard improvement treats retried wrong answers as resolved evidence (1.7262ms)\n✔ manual same-concept retry clears the previous wrong answer before dashboard refresh (0.6144ms)\n✔ mastery scores expose concept understanding from retry evidence (0.8242ms)\n✔ review schedule uses vendored ts-fsrs with a CodeFair MVP cap (0.4408ms)\n✔ upstream ts-fsrs code is vendored and wired into review scheduling (4.9338ms)\n✔ dashboard model exposes today's review concepts from due learning events (0.5815ms)\n✔ review recommendations prioritize low mastery and recent wrong-answer concepts (0.9057ms)\n✔ recommendation trace explains why the top concept was selected (0.5335ms)\n✔ wrong answers recommend another same-concept problem before generating unverified templates (0.4348ms)\n✔ template-generated similar problems are clearly excluded from vetted QA status (0.1037ms)\n✔ AI similar problem generation normalizes Manus output and falls back safely (0.5175ms)\n✔ generated problem quality gate flags missing review evidence without marking it vetted (0.3025ms)\n✔ render-unsafe generated problems use fallback and keep the rejection reason visible (0.3746ms)\n✔ AI diagnosis uses Manus adapter success and falls back safely on failure (1.1023ms)\n✔ AI diagnosis falls back on empty or slow Manus responses (6.1207ms)\n✔ Manus client uses official v2 task API with server-only key header (1.2288ms)\n✔ Manus client can request a structured same-concept problem (0.8107ms)\n✔ Manus client surfaces structured output failure for diagnosis tracing (0.7757ms)\n✔ Manus client reads polling timeout configuration from server environment (0.2692ms)\n✔ fallback diagnosis is deterministic enough for offline demo mode (0.1191ms)\n✔ Manus credentials are kept out of browser-delivered files (6.6148ms)\n✔ static server path guard blocks env and other dotfiles (0.4837ms)\n✔ HTML evidence screen includes review concepts, mistake reason selection, and bounded AI wording (2.628ms)\n✔ Geonho visual shell is absorbed without replacing the scoring system (2.2894ms)\n✔ visible Korean UI hides raw English status labels and internal ids (3.1793ms)\n✔ CodeFair submission package includes summary, architecture, 2-minute script, judge Q&A, and M5 evidence (0.8493ms)\n✔ M4 submission docs are aligned to the latest M3 browser evidence (1.9578ms)\n✔ Geonho human trial checklist turns Auto-Verified evidence into a student-use gate (1.1819ms)\n✔ M5 handoff pack lets another agent run, configure, and add problems without overclaiming delivery (1.7181ms)\n✔ M6 human trial validator blocks templates and accepts only recorded trial evidence (1472.1659ms)\n✔ live Manus verification note records public-safe source evidence (0.7921ms)\nℹ tests 47\nℹ suites 0\nℹ pass 47\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 5215.1029\n",
+      "stderr_tail": ""
+    },
+    {
+      "name": "trial_validate_template_extracted",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-13T13:55:39+09:00",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "run",
+        "trial:validate-template"
+      ],
+      "stdout_tail": "\n> concept-master-codefair@0.1.0 trial:validate-template\n> python scripts/validate_human_trial_record.py --record trial_records/human_trial_record.template.v1.json --mode template\n\n{\n  \"schema\": \"concept_master_human_trial_record_validation.v1\",\n  \"generated_at\": \"2026-06-13T13:55:40+09:00\",\n  \"status\": \"PASS\",\n  \"mode\": \"template\",\n  \"record_path\": \"C:\\\\Users\\\\pjmin\\\\AppData\\\\Local\\\\Temp\\\\conceptmaster-zip-smoke-ehgysc9s\\\\concept-master-codefair\\\\trial_records\\\\human_trial_record.template.v1.json\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"human_verified\": false,\n  \"live_boundary\": {\n    \"publish_upload_delete_browser_write_opened\": false,\n    \"browser_or_vm_authority_opened\": false,\n    \"provider_default_changed\": false,\n    \"training_run_performed\": false,\n    \"git_stage_commit_push_performed\": false\n  }\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "name": "trial_prepare_extracted",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-13T13:55:40+09:00",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "run",
+        "trial:prepare",
+        "--",
+        "--tester",
+        "ZipSmoke",
+        "--date-time",
+        "2026-06-09T19:00:00+09:00",
+        "--label",
+        "zip-smoke"
+      ],
+      "stdout_tail": "\n> concept-master-codefair@0.1.0 trial:prepare\n> python scripts/prepare_human_trial_record.py --tester ZipSmoke --date-time 2026-06-09T19:00:00+09:00 --label zip-smoke\n\n{\n  \"schema\": \"concept_master_human_trial_prepare_result.v1\",\n  \"status\": \"PASS\",\n  \"record_path\": \"C:\\\\Users\\\\pjmin\\\\AppData\\\\Local\\\\Temp\\\\conceptmaster-zip-smoke-ehgysc9s\\\\concept-master-codefair\\\\trial_records\\\\human_trial_record_20260609_190000_0900_zip-smoke.v1.json\",\n  \"record_status\": \"RECORDED\",\n  \"human_verified\": false,\n  \"validate_command\": [\n    \"python\",\n    \"scripts\\\\validate_human_trial_record.py\",\n    \"--record\",\n    \"trial_records\\\\human_trial_record_20260609_190000_0900_zip-smoke.v1.json\",\n    \"--mode\",\n    \"trial\"\n  ],\n  \"next_action\": \"Fill the copied record after actual Geonho or owner use, then run the validate command.\",\n  \"live_boundary\": {\n    \"publish_upload_delete_browser_write_opened\": false,\n    \"browser_or_vm_authority_opened\": false,\n    \"provider_default_changed\": false,\n    \"training_run_performed\": false,\n    \"git_stage_commit_push_performed\": false\n  }\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "name": "trial_start_packet_extracted",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-13T13:55:40+09:00",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "run",
+        "trial:start",
+        "--",
+        "--tester",
+        "ZipSmoke",
+        "--date-time",
+        "2026-06-09T19:00:00+09:00",
+        "--label",
+        "zip-smoke-start",
+        "--port",
+        "4187"
+      ],
+      "stdout_tail": "\n> concept-master-codefair@0.1.0 trial:start\n> python scripts/start_human_trial.py --tester ZipSmoke --date-time 2026-06-09T19:00:00+09:00 --label zip-smoke-start --port 4187\n\n{\n  \"schema\": \"concept_master_human_trial_start_packet.v1\",\n  \"status\": \"PASS\",\n  \"record_path\": \"C:\\\\Users\\\\pjmin\\\\AppData\\\\Local\\\\Temp\\\\conceptmaster-zip-smoke-ehgysc9s\\\\concept-master-codefair\\\\trial_records\\\\human_trial_record_20260609_190000_0900_zip-smoke-start.v1.json\",\n  \"record_status\": \"RECORDED\",\n  \"human_verified\": false,\n  \"app_url\": \"http://localhost:4187\",\n  \"server_command\": [\n    \"npm\",\n    \"start\"\n  ],\n  \"server_environment\": {\n    \"PORT\": \"4187\",\n    \"MANUS_CREDIT_SAVER_MODE\": \"true\"\n  },\n  \"checklist_path\": \"C:\\\\Users\\\\pjmin\\\\AppData\\\\Local\\\\Temp\\\\conceptmaster-zip-smoke-ehgysc9s\\\\concept-master-codefair\\\\GEONHO_HUMAN_TRIAL_CHECKLIST.md\",\n  \"trial_steps\": [\n    \"Run npm test and record PASS or FAIL.\",\n    \"Run npm start with MANUS_CREDIT_SAVER_MODE=true.\",\n    \"Open the app URL and run the 30-second demo once.\",\n    \"Fill this JSON record from the checklist after actual use.\",\n    \"Run the validate_command and keep human_verified false unless it passes.\"\n  ],\n  \"validate_command\": [\n    \"npm\",\n    \"run\",\n    \"trial:validate\",\n    \"--\",\n    \"--record\",\n    \"trial_records\\\\human_trial_record_20260609_190000_0900_zip-smoke-start.v1.json\"\n  ],\n  \"next_action\": \"Start the app, have Geonho or the owner use it once, fill the record, then run validate_command.\",\n  \"live_boundary\": {\n    \"publish_upload_delete_browser_write_opened\": false,\n    \"browser_or_vm_authority_opened\": false,\n    \"provider_default_changed\": false,\n    \"training_run_performed\": false,\n    \"git_stage_commit_push_performed\": false\n  }\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "name": "trial_status_extracted",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-13T13:55:41+09:00",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "run",
+        "trial:status"
+      ],
+      "stdout_tail": "\n> concept-master-codefair@0.1.0 trial:status\n> python scripts/status_human_trial.py\n\n{\n  \"schema\": \"concept_master_human_trial_status.v1\",\n  \"generated_at\": \"2026-06-13T13:55:42+09:00\",\n  \"status\": \"PASS\",\n  \"m6_status\": \"NEEDS_RECORD_COMPLETION\",\n  \"record_path\": \"C:\\\\Users\\\\pjmin\\\\AppData\\\\Local\\\\Temp\\\\conceptmaster-zip-smoke-ehgysc9s\\\\concept-master-codefair\\\\trial_records\\\\human_trial_record_20260609_190000_0900_zip-smoke-start.v1.json\",\n  \"record_count\": 4,\n  \"record_status\": \"RECORDED\",\n  \"tester\": \"ZipSmoke\",\n  \"date_time\": \"2026-06-09T19:00:00+09:00\",\n  \"validator_status\": \"FAIL\",\n  \"issue_count\": 21,\n  \"issues\": [\n    \"missing_required_field:run.ai_status_top_bar\",\n    \"missing_required_field:demo.improvement_rate_shown\",\n    \"missing_required_field:final.human_trial_decision\",\n    \"missing_required_field:final.reason\",\n    \"missing_required_field:final.next_one_action\",\n    \"expected_PASS_FAIL_or_NA:run.npm_test_result\",\n    \"expected_PASS_FAIL_or_NA:run.browser_load_result\",\n    \"expected_PASS_FAIL_or_NA:demo.demo_reached_data_screen\",\n    \"expected_PASS_FAIL_or_NA:demo.attempt_log_shown\",\n    \"expected_PASS_FAIL_or_NA:demo.concept_summary_shown\",\n    \"expected_PASS_FAIL_or_NA:demo.recommendation_trace_shown\",\n    \"expected_PASS_FAIL_or_NA:demo.problem_bank_qa_shown\",\n    \"expected_PASS_FAIL_or_NA:demo.generated_problem_qa_notice_shown_when_needed\",\n    \"expected_PASS_FAIL_or_NA:manus_and_fallback.fallback_demo_finished\",\n    \"expected_PASS_FAIL_or_NA:manus_and_fallback.needs_review_or_qa_issue_shown\",\n    \"missing_required_field:explanation.why_features_were_built\",\n    \"missing_required_field:explanation.what_changed_after_wrong_answer\",\n    \"missing_required_field:explanation.what_ai_helped_with\",\n    \"missing_required_field:explanation.why_retry_uses_same_concept\",\n    \"missing_required_field:explanation.what_data_screen_proves\",\n    \"final.human_trial_decision_must_be_PASS_or_FAIL\"\n  ],\n  \"human_verified\": false,\n  \"next_action\": \"Fill the missing checklist fields after real use, then run npm run trial:validate -- --record <record>.\",\n  \"live_boundary\": {\n    \"publish_upload_delete_browser_write_opened\": false,\n    \"browser_or_vm_authority_opened\": false,\n    \"provider_default_changed\": false,\n    \"training_run_performed\": false,\n    \"git_stage_commit_push_performed\": false\n  }\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "name": "npm_start_http_smoke",
+      "status": "FAIL",
+      "ready": false,
+      "ready_detail": "<urlopen error timed out>",
+      "api_status": "NOT_RUN",
+      "api_detail": ""
+    }
+  ],
+  "issue_count": 1,
+  "issues": [
+    "command_failed:npm_start_http_smoke"
+  ],
+  "human_verified": false,
+  "live_boundary": {
+    "publish_upload_delete_browser_write_opened": false,
+    "browser_or_vm_authority_opened": false,
+    "provider_default_changed": false,
+    "training_run_performed": false,
+    "git_stage_commit_push_performed": false
+  }
+}

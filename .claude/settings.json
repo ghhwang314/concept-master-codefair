@@ -1,0 +1,78 @@
+{
+  "schema": "token_saving_project_settings.v2",
+  "harness_command": "python scripts/execute.py validate",
+  "profile": "codex",
+  "default_read_order": [
+    "phases/CURRENT_PHASE.md",
+    ".claude/commands/harness.md",
+    "reports/token_harness/latest_status.v1.json",
+    "docs/WORK_LANES.md when lane routing is unclear",
+    "targeted docs only",
+    "targeted source files only"
+  ],
+  "live_authority_default": "closed",
+  "preauthorized_advisory_channels": [
+    "webai",
+    "gemini_pro",
+    "chatgpt_pro",
+    "deep_research",
+    "opencode"
+  ],
+  "advisory_communication_requires_gate": false,
+  "execution_status_actions": [
+    "publish",
+    "upload",
+    "delete",
+    "logged_in_browser_or_gui_write",
+    "send_kakao_email_comment_dm",
+    "provider_default_change",
+    "training_or_model_promotion",
+    "account_payment_settings_change",
+    "git_stage_commit_push_pr"
+  ],
+  "webai_usage_controller": {
+    "strategy": "frequent_session_oriented_quiet",
+    "default_visibility": "quiet_artifact_only",
+    "frequent_use_preference": true,
+    "preferred_modes": [
+      "gemini_thinking_mode",
+      "chatgpt_heavy_mode",
+      "deep_research_mode",
+      "opencode_advisory"
+    ],
+    "session_reuse_default": true,
+    "continue_existing_session_before_new_session": true,
+    "max_new_sessions_per_task": 2,
+    "max_followup_turns_per_session": 8,
+    "followup_until": "actionable_answer_or_validated_blocker",
+    "reject_empty_or_low_context_prompt": true,
+    "prompt_quality_required": [
+      "task_context",
+      "specific_question",
+      "expected_output",
+      "public_safe_summary"
+    ],
+    "anti_abuse_controls": [
+      "no_empty_prompt",
+      "no_repeated_new_session_probe",
+      "no_low_context_ping",
+      "respect_provider_rate_limits",
+      "reuse_session_for_followups"
+    ],
+    "use_threshold": 5,
+    "max_advisory_calls_per_task": 3,
+    "batch_related_prompts": true,
+    "dedupe_similar_requests": true,
+    "do_not_announce_every_advisory_call": true,
+    "planner": "D:/Codex/scripts/harness/Plan-ExternalAdvisoryUse.py"
+  },
+  "token_budgets": {
+    "phases/CURRENT_PHASE.md": 6500,
+    "docs/WORK_LANES.md": 22000,
+    ".claude/commands/harness.md": 3500,
+    ".claude/commands/review.md": 2500,
+    "CLAUDE.md": 4500,
+    "AGENTS.md": 4500
+  },
+  "created_at": "2026-06-08T23:17:44+09:00"
+}

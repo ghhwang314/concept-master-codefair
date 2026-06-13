@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>작품요약서 - 오답 DNA 지도(ConceptMaster)</title>
+  <style>
+    body {
+      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #1a1b1f;
+      background-color: #f7f9fa;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #ffffff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      border: 1px solid #eef1f4;
+      margin: 20px auto;
+      max-width: 850px;
+    }
+    .nav-item {
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: #4a5568;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95em;
+      transition: all 0.2s;
+    }
+    .nav-item:hover {
+      background: #f1f3f5;
+      color: #1a202c;
+      text-decoration: none;
+    }
+    .nav-item.active {
+      background: #58cc02;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 850px;
+      margin: 20px auto 40px auto;
+      background: #ffffff;
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      border: 1px solid #eef1f4;
+      box-sizing: border-box;
+    }
+    .header-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #eef1f4;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .brand-mark {
+      font-size: 1.5em;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .brand-green { color: #58cc02; }
+    .brand-dark { color: #2c3e50; }
+    .brand-spark { color: #ffc800; margin-left: 4px; }
+    .badge {
+      background: #eef1f4;
+      color: #4a5568;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+    h1, h2, h3, h4 {
+      color: #0c1017;
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      word-break: keep-all;
+    }
+    h1 {
+      font-size: 2em;
+      border-bottom: 3px solid #58cc02;
+      padding-bottom: 12px;
+      margin-top: 0;
+      color: #1b1b1b;
+    }
+    h2 {
+      font-size: 1.5em;
+      color: #1f2d3d;
+      border-bottom: 1px solid #eef1f4;
+      padding-bottom: 8px;
+    }
+    h3 {
+      font-size: 1.2em;
+      color: #2c3e50;
+    }
+    p {
+      margin: 0 0 1.2em;
+      word-break: keep-all;
+    }
+    a {
+      color: #58cc02;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: #46a302;
+      text-decoration: underline;
+    }
+    ul, ol {
+      margin: 0 0 1.5em;
+      padding-left: 24px;
+    }
+    li {
+      margin-bottom: 0.6em;
+      word-break: keep-all;
+    }
+    pre {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      font-size: 0.9em;
+      margin: 1.5em 0;
+      border: 1px solid #334155;
+    }
+    code {
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      background: #f1f3f5;
+      color: #d63384;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+    }
+    blockquote {
+      border-left: 4px solid #58cc02;
+      background: #f2fbf0;
+      margin: 1.5em 0;
+      padding: 12px 20px;
+      color: #2c3e50;
+      border-radius: 0 8px 8px 0;
+    }
+    .alert-box {
+      padding: 16px 20px;
+      margin: 1.5em 0;
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+    .alert-note {
+      background-color: #f0f7ff;
+      border-color: #0070f3;
+      color: #004085;
+    }
+    .alert-note strong { color: #0056b3; }
+    .alert-tip {
+      background-color: #f2fbf0;
+      border-color: #58cc02;
+      color: #2b5c00;
+    }
+    .alert-tip strong { color: #46a302; }
+    .alert-important {
+      background-color: #fef8f0;
+      border-color: #f5a623;
+      color: #664d03;
+    }
+    .alert-important strong { color: #d97706; }
+    .alert-warning {
+      background-color: #fff5f5;
+      border-color: #ff4d4f;
+      color: #721c24;
+    }
+    .alert-warning strong { color: #d9383a; }
+    .alert-caution {
+      background-color: #fff0f1;
+      border-color: #e02424;
+      color: #9b1c1c;
+    }
+    .alert-caution strong { color: #c81e1e; }
+    
+    @media print {
+      body {
+        background-color: #ffffff;
+      }
+      .nav-bar {
+        display: none;
+      }
+      .container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+      .badge {
+        border: 1px solid #ccc;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+<nav class="nav-bar">
+  <a href="./작품요약서_건호_대상형_초안_20260608.html" class="nav-item active">작품요약서</a>
+  <a href="./작품설명서_건호_대상형_초안_20260608.html" class="nav-item ">작품설명서</a>
+  <a href="./심사기준_자가점검_건호_20260608.html" class="nav-item ">심사 자가점검</a>
+  <a href="./붙여넣기_가이드_건호_20260608.html" class="nav-item ">붙여넣기 가이드</a>
+  <a href="../GEONHO_HUMAN_TRIAL_CHECKLIST.html" class="nav-item ">사용성 테스트 체크리스트</a>
+</nav>
+
+  <main class="container">
+    <header class="header-hero">
+      <div class="brand-mark">
+        <span class="brand-green">ConceptMaster</span>
+        <span class="brand-dark">문서</span>
+        <span class="brand-spark">✦</span>
+      </div>
+      <div class="badge">SW공모전 제출 서류</div>
+    </header>
+    <article>
+      <h1>작품요약서 초안 - 심사기준 반영본</h1>
+<p>팀명: AI오답코치랩</p>
+<p>작품명: 오답 DNA 지도(ConceptMaster)</p>
+<p>참가자: 황건호</p>
+<h2>작품 요약</h2>
+<p>오답 DNA 지도(ConceptMaster)는 초등학교 6학년 학생이 수학 문제를 풀 때 같은 개념에서 반복해서 틀리는 문제를 해결하기 위한 AI 오답 코치 웹앱이다. 한국코드페어 SW공모전 주제인 &quot;AI와 데이터로 해결하는 우리 사회의 문제&quot;에 맞추어, 이 작품은 학습 중 반복 오답과 개념 이해 부족을 해결할 실질적 문제로 보았다. 학생이 정답과 해설만 보고 넘어가면 비슷한 문제에서 다시 틀릴 수 있기 때문에, 오답을 데이터로 남기고 같은 개념을 다시 확인하는 흐름이 필요하다고 판단했다.</p>
+<p>작품은 <code>오답 기록 -&gt; AI 진단 -&gt; 같은 개념 재도전 -&gt; 개선 확인</code> 순서로 작동한다. 학생이 문제를 풀면 <code>attempt_log</code>에 문제 ID, 개념 ID, 오개념 ID, 선택한 답, 정답 여부, AI 진단 출처, 다음 복습일이 저장된다. 오답이 발생하면 Manus API 또는 규칙 기반 fallback이 오답 원인을 설명하고, 같은 개념의 재도전 문제를 추천하거나 생성한다. 재도전 결과는 <code>concept_summary</code>에 반영되어 개념별 오답률, 대표 오개념, 재도전 성공 여부, 오늘 복습할 개념으로 정리된다.</p>
+<p>기존 문제풀이 앱은 정답과 해설을 보여준 뒤 다음 문제로 넘어가는 경우가 많다. 이 작품은 그 방식과 달리, 오답을 하나의 학습 데이터로 저장하고 AI 진단과 재도전 결과까지 연결한다. 그래서 학생은 &quot;몇 문제를 틀렸는지&quot;가 아니라 &quot;어떤 개념을 왜 반복해서 틀렸고, 다시 풀었을 때 나아졌는지&quot;를 볼 수 있다. 이것이 이 작품의 차별점이자 창의성이다.</p>
+<p>현재 구현은 초6 수학 대표문항 6개를 중심으로 심사용 데모를 구성했다. 데모를 실행하면 일부러 오답을 기록하고, AI 또는 fallback 진단을 보여준 뒤, 같은 개념 재도전 문제를 풀게 하고, 마지막에는 오답률, 개선률, <code>attempt_log</code>, <code>concept_summary</code>를 화면에 보여준다. 최신 브라우저 검증에서는 오답 후 재도전 정답을 맞히면 이전 오답이 <code>회복</code>으로 바뀌고 개선률이 50%로 갱신되는 것을 확인했다. 자동 테스트에서는 문제 은행 검증, 학습 기록 저장, 같은 개념 재도전, 대시보드 계산, AI 실패 시 fallback 처리, API 키 비노출, 30초 데모 계약, 15분 인수인계 계약, M6 인간 검증 게이트 등 44개 테스트가 통과했다.</p>
+<p>AI 결과는 무조건 정답으로 처리하지 않는다. 생성 문항은 사람 검수 전까지 <code>needs_review</code> 상태로 표시하고, Manus API가 느리거나 실패해도 fallback으로 데모가 멈추지 않도록 했다. 앞으로는 실제 학생 풀이 데이터를 더 모아 오개념 분류를 보완하고, 초6 수학 단원별 문제 수를 늘리며, 교사용 검수 화면을 추가할 계획이다. 이 작품은 AI가 답을 대신 알려주는 앱이 아니라, 오답 데이터를 이용해 학생이 자신의 약한 개념을 찾고 다시 이해했는지 확인하도록 돕는 AI 학습 회복 도구이다.</p>
+
+    </article>
+  </main>
+</body>
+</html>

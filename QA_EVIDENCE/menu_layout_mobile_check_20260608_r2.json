@@ -1,0 +1,12 @@
+{
+  "statusCode": 200,
+  "errors": [],
+  "metrics": {
+    "activeScreen": "learn",
+    "menuTop": 695,
+    "dataHidden": true,
+    "researchHidden": true,
+    "scrollWidth": 390,
+    "clientWidth": 390
+  }
+}

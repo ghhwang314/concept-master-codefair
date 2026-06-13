@@ -1,0 +1,73 @@
+{
+  "schema": "token_harness_execute_result.v2",
+  "generated_at": "2026-06-11T23:27:27+09:00",
+  "status": "PASS",
+  "commands": [
+    {
+      "name": "phase_harness",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-11T23:27:20+09:00",
+      "command": [
+        "C:\\Users\\pjmin\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Codex\\tmp\\geonho_handoff\\concept-master-codefair\\scripts\\hooks\\validate_phase.py",
+        "--root",
+        "D:\\Codex\\tmp\\geonho_handoff\\concept-master-codefair"
+      ],
+      "stdout_tail": "{\n  \"schema\": \"token_harness_phase_validation.v2\",\n  \"generated_at\": \"2026-06-11T23:27:20+09:00\",\n  \"status\": \"PASS\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"root\": \"D:\\\\Codex\\\\tmp\\\\geonho_handoff\\\\concept-master-codefair\",\n  \"live_boundary\": {\n    \"publish_upload_delete_browser_write_opened\": false,\n    \"browser_or_vm_authority_opened\": false,\n    \"provider_default_changed\": false,\n    \"training_run_performed\": false,\n    \"git_stage_commit_push_performed\": false\n  }\n}\n",
+      "stderr_tail": ""
+    },
+    {
+      "name": "node_check_app",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-11T23:27:20+09:00",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "--check",
+        "src/app.js"
+      ],
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "name": "npm_test",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-11T23:27:20+09:00",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "test"
+      ],
+      "stdout_tail": " exposes an OATutor-style skill map for judge problems (17.1198ms)\n✔ presentation plan anchors a 2-minute script to elementary math representative problems (1.3449ms)\n✔ DTT trace links the full CodeFair loop to tests, code, and evidence (0.5534ms)\n✔ readiness audit locks P0-P6 milestones to current evidence without overclaiming human verification (0.6349ms)\n✔ learning events preserve required CodeFair evidence fields (3.5296ms)\n✔ today quest progress starts at zero when only past records exist (1.5273ms)\n✔ today quest progress completes only from today's solve, diagnosis, and retry evidence (0.674ms)\n✔ wrong-answer DNA map exposes misconception, data source, retry, and review evidence (1.0413ms)\n✔ M3 visible evidence cards expose diagnosis, retry, and before-after proof (13.5531ms)\n✔ M4 judge demo contract is fallback-safe under 30 seconds without Manus API (0.3431ms)\n✔ Manus credit saver policy prevents automatic live calls unless one-shot live AI is requested (0.2773ms)\n✔ M5 learning evidence separates demo_seed, judge_demo, and human_trial logs on the data screen (2.9672ms)\n✔ dashboard metrics expose concept error rate, reason distribution, repeated mistakes, and improvement (1.1091ms)\n✔ dashboard improvement treats retried wrong answers as resolved evidence (1.4561ms)\n✔ manual same-concept retry clears the previous wrong answer before dashboard refresh (0.5753ms)\n✔ mastery scores expose concept understanding from retry evidence (0.9705ms)\n✔ review schedule uses vendored ts-fsrs with a CodeFair MVP cap (0.4069ms)\n✔ upstream ts-fsrs code is vendored and wired into review scheduling (3.9694ms)\n✔ dashboard model exposes today's review concepts from due learning events (0.5569ms)\n✔ review recommendations prioritize low mastery and recent wrong-answer concepts (0.6381ms)\n✔ recommendation trace explains why the top concept was selected (0.3994ms)\n✔ wrong answers recommend another same-concept problem before generating unverified templates (0.5119ms)\n✔ template-generated similar problems are clearly excluded from vetted QA status (0.1243ms)\n✔ AI similar problem generation normalizes Manus output and falls back safely (0.6252ms)\n✔ generated problem quality gate flags missing review evidence without marking it vetted (0.2823ms)\n✔ render-unsafe generated problems use fallback and keep the rejection reason visible (0.8295ms)\n✔ AI diagnosis uses Manus adapter success and falls back safely on failure (0.7098ms)\n✔ AI diagnosis falls back on empty or slow Manus responses (6.5506ms)\n✔ Manus client uses official v2 task API with server-only key header (1.4591ms)\n✔ Manus client can request a structured same-concept problem (0.863ms)\n✔ Manus client surfaces structured output failure for diagnosis tracing (0.9193ms)\n✔ Manus client reads polling timeout configuration from server environment (0.335ms)\n✔ fallback diagnosis is deterministic enough for offline demo mode (0.1555ms)\n✔ Manus credentials are kept out of browser-delivered files (7.7248ms)\n✔ static server path guard blocks env and other dotfiles (0.4513ms)\n✔ HTML evidence screen includes review concepts, mistake reason selection, and bounded AI wording (2.4649ms)\n✔ Geonho visual shell is absorbed without replacing the scoring system (2.9769ms)\n✔ visible Korean UI hides raw English status labels and internal ids (3.2945ms)\n✔ CodeFair submission package includes summary, architecture, 2-minute script, judge Q&A, and M5 evidence (0.9226ms)\n✔ M4 submission docs are aligned to the latest M3 browser evidence (1.4515ms)\n✔ Geonho human trial checklist turns Auto-Verified evidence into a student-use gate (1.0824ms)\n✔ M5 handoff pack lets another agent run, configure, and add problems without overclaiming delivery (1.7874ms)\n✔ M6 human trial validator blocks templates and accepts only recorded trial evidence (2592.2125ms)\n✔ live Manus verification note records public-safe source evidence (1.0252ms)\nℹ tests 47\nℹ suites 0\nℹ pass 47\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 5257.5742\n",
+      "stderr_tail": ""
+    },
+    {
+      "name": "human_trial_template_gate",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_at": "2026-06-11T23:27:26+09:00",
+      "command": [
+        "C:\\Users\\pjmin\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Codex\\tmp\\geonho_handoff\\concept-master-codefair\\scripts\\validate_human_trial_record.py",
+        "--record",
+        "trial_records/human_trial_record.template.v1.json",
+        "--mode",
+        "template"
+      ],
+      "stdout_tail": "{\n  \"schema\": \"concept_master_human_trial_record_validation.v1\",\n  \"generated_at\": \"2026-06-11T23:27:27+09:00\",\n  \"status\": \"PASS\",\n  \"mode\": \"template\",\n  \"record_path\": \"D:\\\\Codex\\\\tmp\\\\geonho_handoff\\\\concept-master-codefair\\\\trial_records\\\\human_trial_record.template.v1.json\",\n  \"issue_count\": 0,\n  \"issues\": [],\n  \"human_verified\": false,\n  \"live_boundary\": {\n    \"publish_upload_delete_browser_write_opened\": false,\n    \"browser_or_vm_authority_opened\": false,\n    \"provider_default_changed\": false,\n    \"training_run_performed\": false,\n    \"git_stage_commit_push_performed\": false\n  }\n}\n",
+      "stderr_tail": ""
+    }
+  ],
+  "issue_count": 0,
+  "baseline_report": "D:\\Codex\\tmp\\geonho_handoff\\concept-master-codefair\\reports\\dtt_baseline\\M0_BASELINE_STATUS.v1.json",
+  "api_environment_report": "D:\\Codex\\tmp\\geonho_handoff\\concept-master-codefair\\reports\\api_environment\\M2_API_ENVIRONMENT_STATUS.v1.json",
+  "handoff_package_scan": "",
+  "live_boundary": {
+    "publish_upload_delete_browser_write_opened": false,
+    "browser_or_vm_authority_opened": false,
+    "provider_default_changed": false,
+    "training_run_performed": false,
+    "git_stage_commit_push_performed": false
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "statusCode": 200,
+  "errors": [],
+  "states": {
+    "learn": {
+      "activeScreen": "learn",
+      "menuTop": 354,
+      "dataHidden": true,
+      "researchHidden": true,
+      "demoHidden": true,
+      "hasVisibleQuestion": true,
+      "hasVisibleResearchLink": false,
+      "hasVisibleDataEvidence": false,
+      "scrollWidth": 1220,
+      "clientWidth": 1220
+    },
+    "data": {
+      "activeScreen": "data",
+      "menuTop": 8,
+      "dataHidden": false,
+      "researchHidden": true,
+      "demoHidden": true,
+      "hasVisibleQuestion": false,
+      "hasVisibleResearchLink": false,
+      "hasVisibleDataEvidence": true,
+      "scrollWidth": 1220,
+      "clientWidth": 1220
+    },
+    "research": {
+      "activeScreen": "research",
+      "menuTop": 354,
+      "dataHidden": true,
+      "researchHidden": false,
+      "demoHidden": true,
+      "hasVisibleQuestion": false,
+      "hasVisibleResearchLink": true,
+      "hasVisibleDataEvidence": false,
+      "scrollWidth": 1220,
+      "clientWidth": 1220
+    }
+  }
+}

@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI 오답 코치</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- 학년 선택 오버레이 -->
+    <div id="grade-select-overlay" class="grade-overlay">
+      <div class="grade-card">
+        <h2>AI 오답 코치</h2>
+        <p>초6 수학 문제를 풀고, 틀린 이유를 확인한 뒤 같은 개념을 다시 풀어보는 테스트입니다.</p>
+        
+        <div class="grade-group">
+          <h3>초등부 제출 범위</h3>
+          <div class="grade-options">
+            <button class="grade-btn" data-grade="elementary_6" type="button">초6 수학 시작</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="app-shell">
+      <header class="topbar duolingo-topbar">
+        <div class="header-title-container">
+          <div class="brand-mark" aria-label="AI 오답 코치">
+            <span class="brand-green">AI 오답</span><span class="brand-dark">코치</span>
+            <span class="brand-spark" aria-hidden="true">✦</span>
+          </div>
+          <p>이번 제출본은 초6 수학 오답 흐름을 먼저 보여 줍니다. 과학은 같은 구조로 다음 단계에 확장합니다.</p>
+        </div>
+        <div class="header-actions duo-header-actions">
+          <div class="duo-score-pill" aria-label="오늘의 학습 요약">
+            <span><b id="today-solved-count">0문제</b><em>오늘 풀이</em></span>
+            <span><b id="today-progress-score">0%</b><em>진행률</em></span>
+          </div>
+          <span id="grade-badge" class="grade-badge">초6 수학</span>
+          <button id="change-grade-btn" class="ghost-button scope-button" type="button">범위 확인</button>
+          <button id="live-ai-once-button" class="ghost-button credit-button" type="button">AI 1회 사용</button>
+          <div id="ai-status" class="status-badge loading" aria-live="polite">
+            <span class="status-dot"></span>
+            <span id="ai-status-text">AI 보조 대기 중</span>
+          </div>
+          <img src="./assets/coach_header.png?v=5" class="header-mascot" alt="프로필" />
+        </div>
+      </header>
+
+      <!-- 메인 뷰 선택 탭 -->
+      <nav class="main-view-selector" aria-label="메인 화면 선택">
+        <button id="view-dashboard-btn" class="view-selector-btn is-active" type="button">홈</button>
+        <button id="view-quiz-btn" class="view-selector-btn" type="button">✍️ 문제풀이 학습</button>
+        <button id="reset-history-btn" class="view-selector-btn" style="color: #ef4444;" type="button">🗑️ 기록 초기화</button>
+      </nav>
+
+      <section class="subject-switcher" aria-label="과목 선택">
+        <button class="subject-card subject-card-math is-active" data-subject="math" type="button" aria-selected="true">
+          <span class="subject-icon math-icon">＋−<br>×÷</span>
+          <span class="subject-copy"><b>수학</b><em>6학년</em></span>
+        </button>
+        <button class="subject-card subject-card-science is-locked" type="button" disabled aria-disabled="true">
+          <span class="subject-icon science-icon">⚗</span>
+          <span class="subject-copy"><b>과학 🔒</b><em>다음 단계</em></span>
+        </button>
+      </section>
+
+
+
+      <!-- 대시보드 뷰 상단 영역 -->
+      <div id="dashboard-view-container">
+        <section class="learning-hero" aria-label="오늘의 오답 개념">
+        <div class="hero-copy">
+          <span class="hero-kicker">오늘의 오답 개념</span>
+          <h2 id="today-review-title">분수의 통분</h2>
+          <p id="today-review-copy">
+            틀린 문제는 끝이 아니에요. 왜 틀렸는지 이해하면, 다음엔 맞힐 수 있어요!
+          </p>
+          <div id="improvement-panel" class="hero-progress-card">
+            <div class="hero-progress-label">
+              <span>이해 회복</span>
+              <strong id="improvement-rate">50%</strong>
+            </div>
+            <div class="hero-progress-track"><span style="width: 50%"></span></div>
+            <em>조금만 더! 같은 개념을 한 번 더 확인해요.</em>
+          </div>
+          <button id="judge-demo-button" class="primary-button hero-demo-button" type="button">테스트 시작</button>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="idea-bubble">💡</div>
+          <img src="./assets/coach_mascot_cutout.png?v=1" class="hero-mascot" alt="" />
+          <span class="confetti confetti-green"></span>
+          <span class="confetti confetti-blue"></span>
+          <span class="confetti confetti-coral"></span>
+        </div>
+      </section>
+
+      <section class="dna-path-section" aria-label="AI 오답 코치 학습 흐름">
+        <div class="section-heading">
+          <h2>AI 오답 코치 학습 흐름</h2>
+          <p>틀린 문제를 다음 복습 자료로 바꾸는 5단계입니다.</p>
+        </div>
+        <ol id="demo-stage-list" class="demo-stage-list dna-road">
+          <li data-stage="wrong">
+            <span class="path-number">1</span>
+            <span class="path-icon">📋</span>
+            <b>오답 기록</b>
+          </li>
+          <li data-stage="diagnosis">
+            <span class="path-number">2</span>
+            <span class="path-icon">AI</span>
+            <b>이유 설명</b>
+          </li>
+          <li data-stage="generation">
+            <span class="path-number">3</span>
+            <span class="path-icon">✏️</span>
+            <b>비슷한 문제 다시 풀기</b>
+          </li>
+          <li data-stage="retry">
+            <span class="path-number">4</span>
+            <span class="path-icon">📈</span>
+            <b>회복 확인</b>
+          </li>
+          <li data-stage="improvement">
+            <span class="path-number">5</span>
+            <span class="path-icon">✅</span>
+            <b>오늘 복습</b>
+          </li>
+        </ol>
+      </section>
+
+      <div id="demo-guide-banner" class="demo-guide-banner" hidden>
+        <div class="guide-header">
+          <span class="guide-badge">테스트 안내</span>
+          <span id="demo-guide-step" class="guide-step-indicator">1단계 / 4단계</span>
+        </div>
+        <h3 id="demo-guide-title">오답 기록 만드는 중</h3>
+        <p id="demo-guide-desc">1번 문항에서 일부러 오답을 선택하여 AI 코칭의 시작점을 만듭니다.</p>
+        <div class="guide-progress-bar">
+          <span id="guide-progress-fill" style="width: 25%"></span>
+        </div>
+      </div>
+
+      <!-- 일일 퀘스트 패널 (대시보드 중간 배치) -->
+      <article class="panel quest-panel" style="margin-bottom: 24px;">
+        <span class="panel-label" style="font-size: 0.85rem; font-weight: 855; color: #4f46e5; margin-bottom: 8px;">🌱 오늘의 일일 퀘스트</span>
+        <div class="growth-message">
+          <span class="growth-icon">♥</span>
+          <div>
+            <b>오답은 성장의 씨앗이에요!</b>
+            <p>실수의 원인을 알면, 실력은 반드시 자라납니다.</p>
+          </div>
+          <span class="growth-sprout">🌱</span>
+        </div>
+        <div class="quest-progress-container" aria-label="오늘의 학습 진행률">
+          <div class="quest-progress-bar"><span id="quest-progress-fill" style="width: 0%"></span></div>
+          <span id="quest-progress-text" class="quest-progress-text">0% 완료</span>
+        </div>
+        <ul class="quest-list">
+          <li id="quest-item-solve" class="quest-item">
+            <span class="checkbox"></span>
+            <span id="quest-solve-text" class="quest-desc">오늘의 개념 도전 (0/3)</span>
+          </li>
+          <li id="quest-item-diagnose" class="quest-item">
+            <span class="checkbox"></span>
+            <span id="quest-diagnose-text" class="quest-desc">이유 설명 확인 (0/1)</span>
+          </li>
+          <li id="quest-item-clear" class="quest-item">
+            <span class="checkbox"></span>
+            <span id="quest-clear-text" class="quest-desc">약점 극복 성공 (0/1)</span>
+          </li>
+        </ul>
+      </article>
+
+      <section class="learning-tools" aria-label="나의 학습 도구">
+        <div class="section-heading">
+          <h2>나의 학습 도구</h2>
+        </div>
+        <div class="tool-card-grid">
+          <button class="tool-card tool-card-blue" type="button" data-screen-target="data" aria-selected="false">
+            <span class="tool-icon">📄</span>
+            <span><b>풀이 기록표</b><em>내가 푼 문제와 오답을 한눈에!</em></span>
+            <span class="tool-arrow">›</span>
+          </button>
+          <button class="tool-card tool-card-yellow" type="button" data-screen-target="data" aria-selected="false">
+            <span class="tool-icon">📋</span>
+            <span><b>개념 요약표</b><em>핵심 개념을 정리하고 쉽게 복습해요!</em></span>
+            <span class="tool-arrow">›</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="evidence-grid detail-evidence-grid" aria-label="AI와 데이터 핵심 증거">
+
+        <article id="misconception-map-panel" class="panel top-concepts-panel">
+          <span class="panel-label">오답 기록 지도</span>
+          <ol id="misconception-map-list" class="rank-list"></ol>
+        </article>
+
+        <article id="ai-diagnosis-card" class="panel judge-flow-card">
+          <span class="panel-label">AI 오답 코치 카드</span>
+          <img src="./assets/coach_diagnosis.png?v=5" class="diagnosis-card-mascot" alt="" aria-hidden="true" />
+          <h3 id="diagnosis-card-title">오답 이유 대기</h3>
+          <p id="diagnosis-card-copy">학생이 먼저 답을 고르면 AI 또는 기본 설명이 왜 틀렸는지 정리해 줍니다.</p>
+        </article>
+
+        <article id="same-concept-retry-card" class="panel judge-flow-card">
+          <span class="panel-label">비슷한 문제 다시 풀기</span>
+          <h3 id="retry-card-title">다시 풀기 대기</h3>
+          <p id="retry-card-copy">오답이 생기면 같은 개념의 비슷한 문제로 한 번 더 연습합니다.</p>
+        </article>
+
+        <article id="before-after-card" class="panel judge-flow-card before-after-card">
+          <span class="panel-label">다시 풀기 확인</span>
+          <div class="before-after-metrics">
+            <div><span>오답 전</span><strong id="before-mistake-count">0</strong></div>
+            <div><span>회복 후</span><strong id="after-mistake-count">0</strong></div>
+          </div>
+          <p id="before-after-copy">다시 풀고 맞히면 남은 오답 수와 개선률이 함께 바뀝니다.</p>
+        </article>
+
+        <article class="panel top-concepts-panel">
+          <span class="panel-label">반복 오답 개념</span>
+          <ol id="top-concepts" class="rank-list"></ol>
+        </article>
+
+        <article class="panel today-review-panel">
+          <span class="panel-label">오늘 복습할 개념</span>
+          <ul id="today-review-concepts" class="review-list"></ul>
+        </article>
+
+        <article class="panel distribution-panel">
+          <span class="panel-label">오답 원인 분포</span>
+          <div id="reason-bars" class="reason-bars"></div>
+          <div class="distribution-legend">
+            <div class="legend-item"><span class="legend-icon type-concept">1</span> 개념 이해 <strong id="legend-concept-count">0</strong></div>
+            <div class="legend-item"><span class="legend-icon type-calc">계</span> 계산 실수 <strong id="legend-calc-count">0</strong></div>
+            <div class="legend-item"><span class="legend-icon type-interp">🔍</span> 문제 해석 <strong id="legend-interp-count">0</strong></div>
+          </div>
+        </article>
+      </section>
+
+      </div> <!-- dashboard-view-container 닫기 -->
+
+      <!-- 문제풀이 뷰 컨테이너 시작 -->
+      <div id="quiz-view-container" class="hidden-view">
+        <section class="workbench">
+        <article class="quiz-panel">
+          <div class="section-header">
+            <div>
+              <span class="panel-label">초6 수학 개념 문제</span>
+              <h2 id="question-concept">문제 준비 중</h2>
+            </div>
+            <button id="next-question-button" class="ghost-button" type="button">다른 문제</button>
+          </div>
+          
+          <div class="subject-filter-container">
+            <button class="filter-tab" data-subject="math" type="button">
+              <span class="tab-emoji">🧮</span>
+              <span class="tab-title">수학</span>
+              <span class="tab-english">초6</span>
+            </button>
+          </div>
+
+          <div class="quiz-body-wrapper">
+            <div class="quiz-left-col">
+              <p id="question-text" class="question-text"></p>
+              <div id="answer-options" class="answer-options"></div>
+              <p id="generated-qa-notice" class="generated-qa-notice" hidden></p>
+            </div>
+            <div class="quiz-right-col">
+              <div class="mascot-speech-container inline-quiz-mascot">
+                <div class="speech-bubble quiz-bubble">이 문제를<br>풀어봐!</div>
+                <img src="./assets/coach_quiz.png?v=7" class="quiz-mascot-img" alt="문제 풀이 코치" />
+              </div>
+            </div>
+          </div>
+
+          <div class="submit-action-wrapper" style="margin-top: 18px;">
+            <button id="submit-answer-button" class="primary-button submit-btn-green" type="button" disabled style="width: 100%;">확인</button>
+          </div>
+          <p id="quiz-feedback" class="feedback" aria-live="polite"></p>
+        </article>
+
+        <aside class="panel qa-panel">
+          <span class="panel-label">문제 준비 확인</span>
+          <div class="qa-badge-pass" id="qa-status">통과: 문제 준비 완료</div>
+          <p id="qa-copy">초6 수학 6개 문항의 정답 번호, 해설, 개념 태그가 준비되었습니다.</p>
+          <ul id="event-log" class="event-log"></ul>
+          <div class="mascot-speech-container inline-qa-mascot">
+            <div class="speech-bubble qa-bubble">이 코치가 초6 수학<br>문제를 준비했어!</div>
+            <img src="./assets/coach_qa.png?v=4" class="qa-mascot-img" alt="문제 준비 코치" />
+          </div>
+        </aside>
+      </section>
+
+      </div> <!-- quiz-view-container 닫기 -->
+
+      <div class="judge-evidence-sections">
+        <nav id="app-menu" class="app-menu" aria-label="AI 오답 코치 메뉴">
+          <button class="menu-tab is-active" type="button" data-screen-target="learn" aria-selected="true">학습</button>
+          <button class="menu-tab" type="button" data-screen-target="demo" aria-selected="false">테스트 흐름</button>
+          <button class="menu-tab" type="button" data-screen-target="data" aria-selected="false">자료</button>
+        </nav>
+
+        <section class="screen is-active" data-screen="learn">
+          <article class="lesson-map" aria-label="개념 학습 경로"></article>
+        </section>
+
+        <section class="demo-strip screen" data-screen="demo" aria-label="테스트 흐름">
+          <p id="demo-summary">테스트 시작을 누르면 오답 기록, 이유 설명, 비슷한 문제 다시 풀기, 회복 확인이 순서대로 진행됩니다.</p>
+          <ol id="presentation-cue-list" class="cue-list"></ol>
+          <ul id="representative-problems" class="representative-list"></ul>
+        </section>
+
+        <section class="screen" data-screen="data">
+          <span>개념 이해도</span>
+          <ul id="mastery-list" class="mastery-list"></ul>
+          <div class="data-evidence-grid">
+            <article id="learning-log-evidence-panel" class="panel data-evidence-panel">
+              <span class="panel-label">내 풀이 기록</span>
+              <h3 data-log-kind="attempt_log">풀이 기록</h3>
+              <div id="data-source-summary" class="data-source-summary" aria-label="기록 출처 요약"></div>
+              <ol id="attempt-log-preview" class="structured-log-list" aria-label="풀이 기록 미리보기"></ol>
+            </article>
+            <article id="concept-summary-evidence-panel" class="panel data-evidence-panel">
+              <span class="panel-label">오답 개념 요약</span>
+              <h3 data-log-kind="concept_summary">개념 요약</h3>
+              <ol id="concept-summary-preview" class="structured-log-list" aria-label="개념 요약 미리보기"></ol>
+              <pre id="learning-log-json" class="json-evidence" aria-label="풀이 자료 원본"></pre>
+            </article>
+          </div>
+          <article id="recommendation-trace-panel" class="panel trace-panel">
+            <ol id="recommendation-trace" class="trace-list"></ol>
+          </article>
+          <article id="problem-bank-evidence-panel" class="panel qa-evidence-panel">
+            <div id="problem-bank-summary" class="qa-summary-grid" aria-label="문제 준비 요약"></div>
+            <ul id="problem-bank-subjects" class="qa-chip-list"></ul>
+          </article>
+        </section>
+
+        <section class="research-board screen" data-screen="research" aria-label="GitHub 참고 근거">
+          <article class="source-card">
+            <a href="https://github.com/CAHLR/OATutor" target="_blank" rel="noreferrer">CAHLR/OATutor</a>
+            <a href="https://github.com/CAHLR/pyBKT" target="_blank" rel="noreferrer">CAHLR/pyBKT</a>
+            <a href="https://github.com/open-spaced-repetition/ts-fsrs" target="_blank" rel="noreferrer">open-spaced-repetition/ts-fsrs</a>
+            <a href="https://github.com/oppia/oppia" target="_blank" rel="noreferrer">oppia/oppia</a>
+            <a href="https://github.com/AOSSIE-Org/EduAid" target="_blank" rel="noreferrer">AOSSIE-Org/EduAid</a>
+          </article>
+          <article id="dtt-trace-panel" class="source-card dtt-trace-panel">
+            <ol id="dtt-trace-list" class="dtt-trace-list"></ol>
+          </article>
+          <article id="readiness-audit-panel" class="source-card readiness-audit-panel">
+            <ol id="readiness-audit-list" class="readiness-audit-list"></ol>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <dialog id="diagnosis-modal" class="diagnosis-modal">
+      <form method="dialog">
+        <div class="modal-header">
+          <div>
+            <span class="panel-label">AI 오답 도움</span>
+            <h2 id="diagnosis-title">왜 틀렸는지 보기</h2>
+          </div>
+          <button class="icon-button" value="close" aria-label="닫기">×</button>
+        </div>
+        
+        <div id="diagnosis-loading" class="diagnosis-loading" style="display: none;">
+          <div class="spinner"></div>
+          <p>틀린 이유를 정리하는 중입니다...</p>
+          <span class="loading-sub">AI 연결이 늦으면 기본 설명으로 이어집니다.</span>
+        </div>
+
+        <div id="diagnosis-content" class="diagnosis-content">
+          <div id="modal-diagnosis-body" class="diagnosis-body">
+            <div class="answer-compare">
+              <p><b>내가 고른 답</b><span id="selected-answer"></span></p>
+              <p><b>정답</b><span id="correct-answer"></span></p>
+            </div>
+            <dl class="diagnosis-list">
+              <div>
+                <dt>틀린 이유</dt>
+                <dd id="diagnosis-reason" style="font-weight: 600; color: #d32f2f;"></dd>
+              </div>
+              <div>
+                <dt>도움 방식</dt>
+                <dd id="diagnosis-trace" class="diagnosis-trace"></dd>
+              </div>
+              <div>
+                <dt><label for="mistake-reason-select">오답 원인 선택</label></dt>
+                <dd>
+                  <select id="mistake-reason-select" class="reason-select">
+                    <option value="concept_misunderstanding">개념 미이해</option>
+                    <option value="calculation_error">계산 실수</option>
+                    <option value="problem_interpretation">문제 해석</option>
+                    <option value="memory_gap">기억 부족</option>
+                  </select>
+                </dd>
+              </div>
+              <div>
+                <dt>왜 그렇게 봤는지</dt>
+                <dd id="diagnosis-evidence"></dd>
+              </div>
+              <div>
+                <dt>다시 볼 내용</dt>
+                <dd id="diagnosis-recommendation"></dd>
+              </div>
+              <div>
+                <dt>다음 복습 예정일</dt>
+                <dd id="next-review-date"></dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- 모달 내부에서 바로 푸는 재도전 문제 영역 -->
+          <div id="modal-quiz-body" class="modal-quiz-body" style="display: none; padding: 15px 0;">
+            <div class="modal-quiz-header" style="margin-bottom: 15px; border-bottom: 2px solid #eef1f4; padding-bottom: 8px;">
+              <span class="panel-label" style="background: #e1f5fe; color: #0288d1; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold;">모달 내 재도전 문제</span>
+              <h3 id="modal-question-concept" style="margin: 8px 0 0 0; font-size: 1.25em; color: #2c3e50;"></h3>
+            </div>
+            <p id="modal-question-text" class="question-text" style="font-size: 1.1em; margin-bottom: 15px; font-weight: 500; line-height: 1.5; color: #1a1b1f;"></p>
+            <div id="modal-answer-options" class="answer-options" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;"></div>
+            <p id="modal-generated-qa-notice" class="generated-qa-notice" style="font-size: 0.85em; color: #666; margin: 5px 0;" hidden></p>
+            <p id="modal-quiz-feedback" class="feedback" style="font-weight: bold; margin-top: 10px; color: #2e7d32; font-size: 1.05em;" aria-live="polite"></p>
+          </div>
+
+          <div class="modal-actions" id="modal-actions-normal">
+            <button id="retry-concept-button" class="primary-button" value="retry" type="button">비슷한 문제 다시 풀기</button>
+            <button class="ghost-button" value="close">닫기</button>
+          </div>
+
+          <div class="modal-actions" id="modal-actions-quiz" style="display: none; justify-content: flex-end; gap: 10px; margin-top: 15px; border-top: 1px solid #eef1f4; padding-top: 15px;">
+            <button id="modal-submit-answer-button" class="primary-button submit-btn-green" type="button" disabled style="min-width: 100px; padding: 10px 20px;">확인</button>
+            <button id="modal-close-quiz-button" class="ghost-button" type="button" style="min-width: 100px; padding: 10px 20px;">닫기</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

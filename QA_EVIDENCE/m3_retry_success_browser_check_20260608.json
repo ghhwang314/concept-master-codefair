@@ -1,0 +1,43 @@
+{
+  "schema": "concept_master_m3_browser_smoke.v1",
+  "generated_at": "2026-06-08T23:50:00+09:00",
+  "status": "PASS",
+  "flow": "learn -> wrong answer -> diagnosis modal -> same-concept retry -> correct retry -> data tab evidence",
+  "evidenceState": {
+    "activeScreen": "data",
+    "afterMistakes": "2",
+    "aiStatus": "AI 상태: 규칙 진단 사용 중",
+    "attemptPreview": [
+      "분수의 통분과 덧셈\n      직접 풀이 · 정답 · 회복\n      generated_math_frac_001_7 · 오개념 없음 · 직접 풀이 · 복습 2026-06-11",
+      "분수의 통분과 덧셈\n      직접 풀이 · 오답 · 회복\n      math_frac_001 · 분모끼리 바로 더하는 오개념 · 규칙 진단 · 복습 2026-06-08",
+      "분수의 통분과 덧셈\n      직접 풀이 · 정답 · 재도전 필요\n      generated_math_frac_001_5 · 오개념 없음 · 직접 풀이 · 복습 2026-06-11",
+      "분수의 통분과 덧셈\n      직접 풀이 · 오답 · 재도전 필요\n      math_frac_001 · 분모끼리 바로 더하는 오개념 · 규칙 진단 · 복습 2026-06-08"
+    ],
+    "beforeAfterCopy": "분수의 통분과 덧셈: 분모끼리 바로 더하는 오개념 · 개선률 50%",
+    "beforeMistakes": "4",
+    "conceptSummary": [
+      "분수의 통분과 덧셈\n      4/7 오답 · 오답률 57% · 회복 확인\n      분모끼리 바로 더하는 오개념 · 직접 풀이, 출처 미확인 · 직접 풀이, 규칙 진단"
+    ],
+    "diagnosisCard": {
+      "copy": "개념 미이해 · 분모끼리 바로 더하는 대표 오답을 선택했습니다. · 규칙 진단 · 크레딧 절약 모드로 규칙 진단",
+      "title": "분모가 다른 분수의 통분"
+    },
+    "improvement": "50%",
+    "rawInternalLeaks": [],
+    "retryCard": {
+      "copy": "검수 완료 문항 · 같은 개념 검수 문항",
+      "title": "분수의 통분과 덧셈"
+    },
+    "title": "오답 DNA 지도 | ConceptMaster",
+    "url": "http://localhost:4173/"
+  },
+  "logs": [],
+  "screenshot": "QA_EVIDENCE/m3_retry_success_data_tab_20260608.png",
+  "live_boundary": {
+    "publish_upload_delete_browser_write_opened": false,
+    "browser_or_vm_authority_opened": false,
+    "provider_default_changed": false,
+    "training_run_performed": false,
+    "git_stage_commit_push_performed": false
+  }
+}

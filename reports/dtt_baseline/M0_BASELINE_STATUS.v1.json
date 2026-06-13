@@ -1,0 +1,26 @@
+{
+  "schema": "concept_master_m0_baseline_status.v1",
+  "generated_at": "2026-06-11T23:27:27+09:00",
+  "status": "PASS",
+  "definition": "Current ConceptMaster baseline is fixed for customer-usable Codex/Antigravity handoff.",
+  "tests": {
+    "harness_phase": "PASS",
+    "node_syntax": "PASS",
+    "product_tests": "PASS",
+    "human_trial_template_gate": "PASS"
+  },
+  "trace": {
+    "harness_report": "D:\\Codex\\tmp\\geonho_handoff\\concept-master-codefair\\reports\\token_harness\\latest_status.v1.json",
+    "menu_browser_report": "QA_EVIDENCE/menu_layout_browser_check_20260608_r2.json",
+    "duolingo_browser_report": "QA_EVIDENCE/duolingo_style_browser_check_20260608_r2.json",
+    "submission_prompt": "SUBMISSION_DOCS/DTT_CUSTOMER_USABLE_EXECUTION_PROMPT_20260608.md",
+    "readiness_note": "Human-Verified remains false until Geonho completes a real use trial."
+  },
+  "live_boundary": {
+    "publish_upload_delete_browser_write_opened": false,
+    "browser_or_vm_authority_opened": false,
+    "provider_default_changed": false,
+    "training_run_performed": false,
+    "git_stage_commit_push_performed": false
+  }
+}

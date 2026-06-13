@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>붙여넣기 가이드 및 질의응답</title>
+  <style>
+    body {
+      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #1a1b1f;
+      background-color: #f7f9fa;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #ffffff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      border: 1px solid #eef1f4;
+      margin: 20px auto;
+      max-width: 850px;
+    }
+    .nav-item {
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: #4a5568;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95em;
+      transition: all 0.2s;
+    }
+    .nav-item:hover {
+      background: #f1f3f5;
+      color: #1a202c;
+      text-decoration: none;
+    }
+    .nav-item.active {
+      background: #58cc02;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 850px;
+      margin: 20px auto 40px auto;
+      background: #ffffff;
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      border: 1px solid #eef1f4;
+      box-sizing: border-box;
+    }
+    .header-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #eef1f4;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .brand-mark {
+      font-size: 1.5em;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .brand-green { color: #58cc02; }
+    .brand-dark { color: #2c3e50; }
+    .brand-spark { color: #ffc800; margin-left: 4px; }
+    .badge {
+      background: #eef1f4;
+      color: #4a5568;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+    h1, h2, h3, h4 {
+      color: #0c1017;
+      font-weight: 700;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      word-break: keep-all;
+    }
+    h1 {
+      font-size: 2em;
+      border-bottom: 3px solid #58cc02;
+      padding-bottom: 12px;
+      margin-top: 0;
+      color: #1b1b1b;
+    }
+    h2 {
+      font-size: 1.5em;
+      color: #1f2d3d;
+      border-bottom: 1px solid #eef1f4;
+      padding-bottom: 8px;
+    }
+    h3 {
+      font-size: 1.2em;
+      color: #2c3e50;
+    }
+    p {
+      margin: 0 0 1.2em;
+      word-break: keep-all;
+    }
+    a {
+      color: #58cc02;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: #46a302;
+      text-decoration: underline;
+    }
+    ul, ol {
+      margin: 0 0 1.5em;
+      padding-left: 24px;
+    }
+    li {
+      margin-bottom: 0.6em;
+      word-break: keep-all;
+    }
+    pre {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      font-size: 0.9em;
+      margin: 1.5em 0;
+      border: 1px solid #334155;
+    }
+    code {
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      background: #f1f3f5;
+      color: #d63384;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+    }
+    blockquote {
+      border-left: 4px solid #58cc02;
+      background: #f2fbf0;
+      margin: 1.5em 0;
+      padding: 12px 20px;
+      color: #2c3e50;
+      border-radius: 0 8px 8px 0;
+    }
+    .alert-box {
+      padding: 16px 20px;
+      margin: 1.5em 0;
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+    .alert-note {
+      background-color: #f0f7ff;
+      border-color: #0070f3;
+      color: #004085;
+    }
+    .alert-note strong { color: #0056b3; }
+    .alert-tip {
+      background-color: #f2fbf0;
+      border-color: #58cc02;
+      color: #2b5c00;
+    }
+    .alert-tip strong { color: #46a302; }
+    .alert-important {
+      background-color: #fef8f0;
+      border-color: #f5a623;
+      color: #664d03;
+    }
+    .alert-important strong { color: #d97706; }
+    .alert-warning {
+      background-color: #fff5f5;
+      border-color: #ff4d4f;
+      color: #721c24;
+    }
+    .alert-warning strong { color: #d9383a; }
+    .alert-caution {
+      background-color: #fff0f1;
+      border-color: #e02424;
+      color: #9b1c1c;
+    }
+    .alert-caution strong { color: #c81e1e; }
+    
+    @media print {
+      body {
+        background-color: #ffffff;
+      }
+      .nav-bar {
+        display: none;
+      }
+      .container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+      .badge {
+        border: 1px solid #ccc;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+<nav class="nav-bar">
+  <a href="./작품요약서_건호_대상형_초안_20260608.html" class="nav-item ">작품요약서</a>
+  <a href="./작품설명서_건호_대상형_초안_20260608.html" class="nav-item ">작품설명서</a>
+  <a href="./심사기준_자가점검_건호_20260608.html" class="nav-item ">심사 자가점검</a>
+  <a href="./붙여넣기_가이드_건호_20260608.html" class="nav-item active">붙여넣기 가이드</a>
+  <a href="../GEONHO_HUMAN_TRIAL_CHECKLIST.html" class="nav-item ">사용성 테스트 체크리스트</a>
+</nav>
+
+  <main class="container">
+    <header class="header-hero">
+      <div class="brand-mark">
+        <span class="brand-green">ConceptMaster</span>
+        <span class="brand-dark">문서</span>
+        <span class="brand-spark">✦</span>
+      </div>
+      <div class="badge">SW공모전 제출 서류</div>
+    </header>
+    <article>
+      <h1>붙여넣기 가이드</h1>
+<h2>HWP 파일별 사용 위치</h2>
+<p><code>코드페어 작품요약서 건호2 완.hwp</code>에는 아래 파일의 전체 본문을 작품 요약 칸에 넣는다.</p>
+<ul>
+  <li><code>SUBMISSION_DOCS/작품요약서_건호_대상형_초안_20260608.md</code></li>
+</ul>
+<p><code>서식 2 작품설명서_건호.hwp</code>에는 아래 파일을 기준으로 항목별로 붙여 넣는다.</p>
+<ul>
+  <li><code>SUBMISSION_DOCS/작품설명서_건호_대상형_초안_20260608.md</code></li>
+</ul>
+<h2>심사기준 체크</h2>
+<p>작품설명서는 아래 5개 20점 항목이 보이도록 붙여 넣는다.</p>
+<ul>
+  <li>개발 목적: 개발 배경 및 필요성, 개발 주제와 목적</li>
+  <li>설계와 방법론: 설계와 방법론, AI와 데이터 활용</li>
+  <li>구현 및 유용성: 구현 및 유용성, 작품 테스트</li>
+  <li>창의성: 유사 제품 및 차별점, 창의성</li>
+  <li>제출 자료: 제출 자료와 출처, 위험성 검토</li>
+</ul>
+<p>P/F 항목은 서류 구비와 위험성 검토이다. API 키 비노출, 개인정보 미수집, <code>needs_review</code> 표시를 반드시 남긴다.</p>
+<h2>팀명과 작품명</h2>
+<ul>
+  <li>팀명: AI오답코치랩</li>
+  <li>작품명: 오답 DNA 지도(ConceptMaster)</li>
+  <li>참가자: 황건호</li>
+</ul>
+<h2>꼭 유지할 표현</h2>
+<ul>
+  <li>&quot;AI 오답 코치&quot;</li>
+  <li>&quot;오답 데이터를 개념과 오개념으로 저장&quot;</li>
+  <li>&quot;<code>attempt_log</code>와 <code>concept_summary</code>&quot;</li>
+  <li>&quot;같은 개념 재도전&quot;</li>
+  <li>&quot;Manus API와 fallback을 모두 갖춘 구조&quot;</li>
+  <li>&quot;44개 테스트 통과, 0개 실패&quot;</li>
+  <li>&quot;AI 결과는 사람 검수 전까지 <code>needs_review</code>&quot;</li>
+  <li>&quot;demo_seed, judge_demo, human_trial 데이터 구분&quot;</li>
+</ul>
+<h2>빼야 할 표현</h2>
+<ul>
+  <li>&quot;모든 단계가 항상 Manus API로 성공한다&quot;</li>
+  <li>&quot;장기 학습 효과가 이미 증명되었다&quot;</li>
+  <li>&quot;AI가 정답을 완벽하게 판단한다&quot;</li>
+  <li>&quot;실제 학생 전체에게 검증 완료&quot;</li>
+</ul>
+<h2>건호가 외워야 할 가장 쉬운 설명</h2>
+<p>이 작품은 문제를 많이 내는 앱이 아니라, 내가 왜 자꾸 틀리는지 기록하는 앱입니다. 틀리면 AI가 오답 이유를 알려주고, 같은 개념 문제를 다시 풀게 합니다. 그래서 마지막에는 내가 진짜로 그 개념을 다시 이해했는지 데이터로 볼 수 있습니다.</p>
+<h2>심사위원 질문 대비</h2>
+<p>Q. AI는 어디에 쓰였나요?</p>
+<p>A. 오답 원인 진단과 같은 개념 재도전 문제 추천 또는 생성에 사용했습니다. API가 느리면 fallback이 작동해서 데모가 멈추지 않습니다.</p>
+<p>Q. 데이터는 어디에 있나요?</p>
+<p>A. 학생의 풀이 기록은 <code>attempt_log</code>에 저장되고, 개념별 오답률과 대표 오개념은 <code>concept_summary</code>에 정리됩니다.</p>
+<p>Q. 기존 문제풀이 앱과 무엇이 다른가요?</p>
+<p>A. 기존 앱은 정답과 해설을 보여주고 넘어가지만, 이 앱은 오답 원인을 기록하고 같은 개념을 다시 풀어 이해가 회복되었는지 확인합니다.</p>
+<p>Q. 한계는 무엇인가요?</p>
+<p>A. 현재는 초6 수학 대표문항 중심의 제출용 MVP이고, 장기 학습 효과는 실제 학생 데이터를 더 모아 검증해야 합니다.</p>
+
+    </article>
+  </main>
+</body>
+</html>
