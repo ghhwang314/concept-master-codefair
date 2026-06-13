@@ -1067,11 +1067,45 @@ async function requestDiagnosis(problem, selectedAnswer, options = {}) {
     });
   }
   try {
-    const response = await postJson("/api/diagnose", {
+    let response = await postJson("/api/diagnose", {
       questionId: problem.id,
       selectedAnswer,
       useLiveAi: options.useLiveAi === true,
     }, options.timeoutMs);
+
+    if (response && response.status === "processing" && response.taskId) {
+      const taskId = response.taskId;
+      const startTime = Date.now();
+      const timeoutMs = options.timeoutMs || 25000;
+      
+      while (Date.now() - startTime < timeoutMs) {
+        await delay(2000);
+        try {
+          const pollRes = await fetch(`/api/diagnose?taskId=${taskId}`);
+          if (!pollRes.ok) throw new Error(`poll_failed_${pollRes.status}`);
+          const data = await pollRes.json();
+          if (data.status === "completed") {
+            return data.diagnosis;
+          }
+          if (data.status === "failed") {
+            return data.fallback || fallbackDiagnosis({
+              problem,
+              selectedAnswer,
+              aiTrace: {
+                provider: "browser",
+                path: "diagnosis",
+                fallbackReason: "manus_client_error",
+                message: "AI 작업 실행 오류가 발생해 기본 설명으로 전환했습니다.",
+              },
+            });
+          }
+        } catch (pollErr) {
+          console.warn("Polling error:", pollErr);
+        }
+      }
+      throw new Error("diagnosis_timeout");
+    }
+
     return response;
   } catch (error) {
     console.warn("[ConceptMaster] browser diagnosis fallback", {
@@ -1290,16 +1324,52 @@ async function requestGeneratedSimilarProblem(event, options = {}) {
       reason: "fallback_generated_same_concept",
     };
   }
-  const problem = await postJson("/api/generate-similar-problem", {
+  try {
+    let response = await postJson("/api/generate-similar-problem", {
       questionId: event.questionId,
       diagnosis: event.aiDiagnosis,
       sequence: learningEvents.length + 1,
       useLiveAi: options.useLiveAi === true,
-  }, options.timeoutMs);
-  return {
-    problem,
-    reason: problem.generatedBy === "manus_api" ? "ai_generated_same_concept" : "fallback_generated_same_concept",
-  };
+    }, options.timeoutMs);
+
+    if (response && response.status === "processing" && response.taskId) {
+      const taskId = response.taskId;
+      const startTime = Date.now();
+      const timeoutMs = options.timeoutMs || 25000;
+      
+      while (Date.now() - startTime < timeoutMs) {
+        await delay(2000);
+        try {
+          const pollRes = await fetch(`/api/generate-similar-problem?taskId=${taskId}`);
+          if (!pollRes.ok) throw new Error(`poll_failed_${pollRes.status}`);
+          const data = await pollRes.json();
+          if (data.status === "completed") {
+            const finalProblem = data.problem;
+            return {
+              problem: finalProblem,
+              reason: finalProblem.generatedBy === "manus_api" ? "ai_generated_same_concept" : "fallback_generated_same_concept",
+            };
+          }
+        } catch (pollErr) {
+          console.warn("Polling error:", pollErr);
+        }
+      }
+      throw new Error("generation_timeout");
+    }
+
+    return {
+      problem: response,
+      reason: response.generatedBy === "manus_api" ? "ai_generated_same_concept" : "fallback_generated_same_concept",
+    };
+  } catch (error) {
+    console.warn("[ConceptMaster] browser generation fallback", error.message);
+    const sourceProblem = problems.find((p) => p.id === event.questionId);
+    const fallback = createTemplateProblem({ sourceProblem, sequence: learningEvents.length + 1 });
+    return {
+      problem: fallback,
+      reason: "fallback_generated_same_concept",
+    };
+  }
 }
 
 async function runJudgeDemo() {

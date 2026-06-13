@@ -8,7 +8,13 @@ import { loadEnvFile } from "./env.js";
 import { generateSimilarProblem } from "./generation.js";
 import { buildCreditPolicy, shouldUseLiveManus } from "./manusCreditPolicy.js";
 import { ManusAiClient } from "./manusClient.js";
-import { getProblems } from "./problems.js";
+import {
+  getProblems,
+  normalizeGeneratedProblem,
+  validateGeneratedProblem,
+  attachGeneratedQualityGate,
+  createTemplateProblem
+} from "./problems.js";
 import { isSafeStaticPath } from "./staticSecurity.js";
 
 const root = normalize(join(fileURLToPath(new URL("..", import.meta.url))));
@@ -16,6 +22,7 @@ loadEnvFile(root);
 const port = Number(process.env.PORT || 4173);
 const diagnosisCache = new Map();
 const generatedProblemCache = new Map();
+const activeTasks = new Map();
 
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -27,113 +34,218 @@ const mime = {
 
 const server = createServer(async (req, res) => {
   try {
-    if (req.method === "POST" && req.url === "/api/diagnose") {
-      const body = await readJson(req);
-      const problem = getProblems().find((item) => item.id === body.questionId);
-      if (!problem) return sendJson(res, 404, { error: "problem_not_found" });
-      const requestedLiveAi = body.useLiveAi === true;
-      const cacheKey = buildDiagnosisCacheKey({ questionId: problem.id, selectedAnswer: body.selectedAnswer });
+    const urlObj = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+    const pathname = urlObj.pathname;
+    const taskId = urlObj.searchParams.get("taskId");
 
-      console.log(`\n📥 [요청 수신] 오답 진단 요청 수신 (문제 ID: ${problem.id})`);
-      console.log(`   - 질문: "${problem.question}"`);
-      console.log(`   - 학생 선택: ${body.selectedAnswer + 1}번 보기 ("${problem.options[body.selectedAnswer]}")`);
-      console.log(`   - 실제 정답: ${problem.answer + 1}번 보기 ("${problem.options[problem.answer]}")`);
-
-      if (requestedLiveAi && diagnosisCache.has(cacheKey)) {
-        console.log(`   ♻️  [캐시 히트] 이전에 분석 완료된 AI 진단 결과가 캐시 메모리에 있어 이를 재사용합니다.`);
-        return sendJson(res, 200, withCreditPolicy(diagnosisCache.get(cacheKey), {
-          requestedLiveAi,
-          liveManusUsed: false,
-          cacheHit: true,
-        }));
-      }
-
-      if (!shouldUseLiveManus({ requestedLiveAi })) {
-        console.log(`   ⚠️  [규칙 기반 fallback] 크레딧 절약 또는 로컬 오프라인 모드로 인해 마노스 API 호출 대신 규칙 기반 진단을 즉시 반환합니다.`);
-        const diagnosis = fallbackDiagnosis({
-          problem,
-          selectedAnswer: body.selectedAnswer,
-          aiTrace: {
-            provider: "server",
-            path: "diagnosis",
-            fallbackReason: "credit_saver_mode",
-            message: "크레딧 절약 모드라 Manus 호출 없이 규칙 진단으로 처리했습니다.",
-          },
-        });
-        return sendJson(res, 200, withCreditPolicy(diagnosis, {
-          requestedLiveAi,
-          liveManusUsed: false,
-          cacheHit: false,
-        }));
-      }
-
-      console.log(`   🔍 [AI 호출] 마노스 AI 에이전트(manus-1.6-lite)에게 오답 원인 실시간 분석을 요청합니다. (대기 시간 발생)...`);
-      const diagnosis = await diagnoseMistake({
-        problem,
-        selectedAnswer: body.selectedAnswer,
-        client: new ManusAiClient(),
-        timeoutMs: Number(process.env.MANUS_DIAGNOSIS_TIMEOUT_MS || 20_000),
-      });
-      logDiagnosisFallback({ diagnosis, questionId: problem.id });
-      
-      console.log(`   ✅ [AI 응답 완료] 마노스 AI 분석 완료!`);
-      console.log(`      - 분석 원인: ${diagnosis.reason} (개념 격차: ${diagnosis.conceptGap})`);
-      console.log(`      - 판단 근거: "${diagnosis.evidence}"`);
-      console.log(`      - 추천 피드백: "${diagnosis.recommendation}"`);
-
-      if (diagnosis.source === "manus_api") diagnosisCache.set(cacheKey, diagnosis);
-      return sendJson(res, 200, withCreditPolicy(diagnosis, {
-        requestedLiveAi,
-        liveManusUsed: diagnosis.source === "manus_api",
-        cacheHit: false,
-      }));
+    if (req.method === "GET" && pathname === "/api/status") {
+      return sendJson(res, 200, { configured: !!process.env.MANUS_API_KEY });
     }
 
-    if (req.method === "POST" && req.url === "/api/generate-similar-problem") {
-      const body = await readJson(req);
-      const problem = getProblems().find((item) => item.id === body.questionId);
-      if (!problem) return sendJson(res, 404, { error: "problem_not_found" });
-      const requestedLiveAi = body.useLiveAi === true;
-      const cacheKey = buildGenerationCacheKey({
-        questionId: problem.id,
-        diagnosis: body.diagnosis,
-        sequence: Number(body.sequence || 1),
-      });
+    if (pathname === "/api/diagnose") {
+      if (req.method === "GET" && taskId) {
+        const task = activeTasks.get(taskId);
+        if (!task) return sendJson(res, 404, { error: "task_not_found" });
 
-      console.log(`\n📥 [요청 수신] 유사문항 생성 요청 수신 (원래 문제 ID: ${problem.id})`);
-      console.log(`   - 분석된 오답 원인: ${body.diagnosis?.reason || "알 수 없음"}`);
-
-      if (requestedLiveAi && generatedProblemCache.has(cacheKey)) {
-        console.log(`   ♻️  [캐시 히트] 이미 생성된 AI 유사 문항이 캐시 메모리에 있어 재사용합니다.`);
-        return sendJson(res, 200, withCreditPolicy(generatedProblemCache.get(cacheKey), {
-          requestedLiveAi,
-          liveManusUsed: false,
-          cacheHit: true,
-        }));
+        try {
+          const client = new ManusAiClient();
+          const result = await client.checkDiagnosis(taskId);
+          if (result) {
+            if (result.source === "manus_api") diagnosisCache.set(task.cacheKey, result);
+            activeTasks.delete(taskId);
+            return sendJson(res, 200, {
+              status: "completed",
+              diagnosis: withCreditPolicy(result, {
+                requestedLiveAi: task.requestedLiveAi,
+                liveManusUsed: true,
+                cacheHit: false,
+              }),
+            });
+          }
+          return sendJson(res, 200, { status: "processing" });
+        } catch (error) {
+          console.warn("[Local Server] async diagnosis poll failed, falling back", error.message);
+          activeTasks.delete(taskId);
+          const diagnosis = fallbackDiagnosis({
+            problem: task.problem,
+            selectedAnswer: task.selectedAnswer,
+            aiTrace: {
+              provider: "manus",
+              path: "diagnosis",
+              fallbackReason: "manus_client_error",
+              message: error.message,
+            },
+          });
+          return sendJson(res, 200, {
+            status: "completed",
+            diagnosis: withCreditPolicy(diagnosis, {
+              requestedLiveAi: task.requestedLiveAi,
+              liveManusUsed: false,
+              cacheHit: false,
+            }),
+          });
+        }
       }
 
-      console.log(`   🔍 [AI 호출] 마노스 AI 에이전트(manus-1.6-lite)에게 맞춤형 유사문항 실시간 생성을 요청합니다...`);
-      const generatedProblem = await generateSimilarProblem({
-        sourceProblem: problem,
-        diagnosis: body.diagnosis,
-        sequence: Number(body.sequence || 1),
-        client: shouldUseLiveManus({ requestedLiveAi }) ? new ManusAiClient() : null,
-        timeoutMs: Number(process.env.MANUS_GENERATION_TIMEOUT_MS || process.env.MANUS_DIAGNOSIS_TIMEOUT_MS || 20_000),
-      });
+      if (req.method === "POST") {
+        const body = await readJson(req);
+        const problem = getProblems().find((item) => item.id === body.questionId);
+        if (!problem) return sendJson(res, 404, { error: "problem_not_found" });
+        const requestedLiveAi = body.useLiveAi === true;
+        const cacheKey = buildDiagnosisCacheKey({ questionId: problem.id, selectedAnswer: body.selectedAnswer });
 
-      console.log(`   ✅ [AI 생성 완료] 맞춤형 문항이 준비되었습니다.`);
-      console.log(`      - 출제된 질문: "${generatedProblem.question}"`);
-      console.log(`      - 선택지 정보: ${generatedProblem.options.map((opt, idx) => `${idx + 1}. ${opt}`).join(" / ")}`);
-      console.log(`      - 정답 위치: ${generatedProblem.answer + 1}번 보기 ("${generatedProblem.options[generatedProblem.answer]}")`);
-      console.log(`      - 출제 사유: "${generatedProblem.sourceReason}"`);
-      console.log(`      - 생성 방식: ${generatedProblem.generatedBy === "manus_api" ? "실시간 마노스 API 호출" : "안전 템플릿 fallback"}`);
+        console.log(`\n📥 [요청 수신] 오답 진단 요청 수신 (문제 ID: ${problem.id})`);
 
-      if (generatedProblem.generatedBy === "manus_api") generatedProblemCache.set(cacheKey, generatedProblem);
-      return sendJson(res, 200, withCreditPolicy(generatedProblem, {
-        requestedLiveAi,
-        liveManusUsed: generatedProblem.generatedBy === "manus_api",
-        cacheHit: false,
-      }));
+        if (requestedLiveAi && diagnosisCache.has(cacheKey)) {
+          console.log(`   ♻️  [캐시 히트] 이전에 분석 완료된 AI 진단 결과가 캐시 메모리에 있어 이를 재사용합니다.`);
+          return sendJson(res, 200, withCreditPolicy(diagnosisCache.get(cacheKey), {
+            requestedLiveAi,
+            liveManusUsed: false,
+            cacheHit: true,
+          }));
+        }
+
+        if (!shouldUseLiveManus({ requestedLiveAi })) {
+          console.log(`   ⚠️  [규칙 기반 fallback] 크레딧 절약 또는 로컬 오프라인 모드로 인해 마노스 API 호출 대신 규칙 기반 진단을 즉시 반환합니다.`);
+          const diagnosis = fallbackDiagnosis({
+            problem,
+            selectedAnswer: body.selectedAnswer,
+            aiTrace: {
+              provider: "server",
+              path: "diagnosis",
+              fallbackReason: "credit_saver_mode",
+              message: "크레딧 절약 모드라 Manus 호출 없이 규칙 진단으로 처리했습니다.",
+            },
+          });
+          return sendJson(res, 200, withCreditPolicy(diagnosis, {
+            requestedLiveAi,
+            liveManusUsed: false,
+            cacheHit: false,
+          }));
+        }
+
+        console.log(`   🔍 [AI 호출] 마노스 AI 에이전트(manus-1.6-lite)에게 오답 원인 분석 작업 생성을 요청합니다...`);
+        const client = new ManusAiClient();
+        const newTaskId = await client.startDiagnosis({
+          problem,
+          selectedAnswer: body.selectedAnswer,
+          selectedOption: problem.options[body.selectedAnswer],
+          correctAnswer: problem.answer,
+          correctOption: problem.options[problem.answer],
+        });
+
+        activeTasks.set(newTaskId, {
+          type: "diagnosis",
+          problem,
+          selectedAnswer: body.selectedAnswer,
+          requestedLiveAi,
+          cacheKey,
+        });
+
+        console.log(`   ✅ [AI 작업 생성 완료] 작업 ID: ${newTaskId}. 클라이언트가 폴링을 시작합니다.`);
+        return sendJson(res, 200, { status: "processing", taskId: newTaskId });
+      }
+    }
+
+    if (pathname === "/api/generate-similar-problem") {
+      if (req.method === "GET" && taskId) {
+        const task = activeTasks.get(taskId);
+        if (!task) return sendJson(res, 404, { error: "task_not_found" });
+
+        try {
+          const client = new ManusAiClient();
+          const result = await client.checkGeneration(taskId);
+          if (result) {
+            const normalized = normalizeGeneratedProblem({
+              sourceProblem: task.problem,
+              generated: result,
+              sequence: task.sequence,
+              generatedBy: "manus_api",
+            });
+            const gate = validateGeneratedProblem(normalized);
+            const finalProblem = gate.renderSafe ? normalized : attachGeneratedQualityGate(
+              createTemplateProblem({ sourceProblem: task.problem, sequence: task.sequence }),
+              [`Manus generated problem was not render-safe: ${gate.issues.join("; ")}`]
+            );
+
+            if (gate.renderSafe) generatedProblemCache.set(task.cacheKey, finalProblem);
+            activeTasks.delete(taskId);
+            return sendJson(res, 200, {
+              status: "completed",
+              problem: withCreditPolicy(finalProblem, {
+                requestedLiveAi: task.requestedLiveAi,
+                liveManusUsed: gate.renderSafe,
+                cacheHit: false,
+              }),
+            });
+          }
+          return sendJson(res, 200, { status: "processing" });
+        } catch (error) {
+          console.warn("[Local Server] async generation poll failed, falling back", error.message);
+          activeTasks.delete(taskId);
+          const fallback = createTemplateProblem({ sourceProblem: task.problem, sequence: task.sequence });
+          return sendJson(res, 200, {
+            status: "completed",
+            problem: withCreditPolicy(fallback, {
+              requestedLiveAi: task.requestedLiveAi,
+              liveManusUsed: false,
+              cacheHit: false,
+            }),
+          });
+        }
+      }
+
+      if (req.method === "POST") {
+        const body = await readJson(req);
+        const problem = getProblems().find((item) => item.id === body.questionId);
+        if (!problem) return sendJson(res, 404, { error: "problem_not_found" });
+        const requestedLiveAi = body.useLiveAi === true;
+        const sequence = Number(body.sequence || 1);
+        const cacheKey = buildGenerationCacheKey({
+          questionId: problem.id,
+          diagnosis: body.diagnosis,
+          sequence,
+        });
+
+        console.log(`\n📥 [요청 수신] 유사문항 생성 요청 수신 (원래 문제 ID: ${problem.id})`);
+
+        if (requestedLiveAi && generatedProblemCache.has(cacheKey)) {
+          console.log(`   ♻️  [캐시 히트] 이미 생성된 AI 유사 문항이 캐시 메모리에 있어 재사용합니다.`);
+          return sendJson(res, 200, withCreditPolicy(generatedProblemCache.get(cacheKey), {
+            requestedLiveAi,
+            liveManusUsed: false,
+            cacheHit: true,
+          }));
+        }
+
+        if (!shouldUseLiveManus({ requestedLiveAi })) {
+          console.log(`   ⚠️  [규칙 기반 fallback] 크레딧 절약 또는 로컬 오프라인 모드로 인해 안전 템플릿 문항을 즉시 반환합니다.`);
+          const fallback = createTemplateProblem({ sourceProblem: problem, sequence });
+          return sendJson(res, 200, withCreditPolicy(fallback, {
+            requestedLiveAi,
+            liveManusUsed: false,
+            cacheHit: false,
+          }));
+        }
+
+        console.log(`   🔍 [AI 호출] 마노스 AI 에이전트(manus-1.6-lite)에게 맞춤형 유사문항 생성 작업 생성을 요청합니다...`);
+        const client = new ManusAiClient();
+        const newTaskId = await client.startGeneration({
+          sourceProblem: problem,
+          diagnosis: body.diagnosis,
+        });
+
+        activeTasks.set(newTaskId, {
+          type: "generation",
+          problem,
+          sequence,
+          requestedLiveAi,
+          cacheKey,
+        });
+
+        console.log(`   ✅ [AI 작업 생성 완료] 작업 ID: ${newTaskId}. 클라이언트가 폴링을 시작합니다.`);
+        return sendJson(res, 200, { status: "processing", taskId: newTaskId });
+      }
     }
 
     const urlPath = new URL(req.url || "/", `http://${req.headers.host}`).pathname;

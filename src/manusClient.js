@@ -116,47 +116,113 @@ export class ManusAiClient {
     };
   }
 
-  async pollDiagnosis(taskId) {
-    for (let attempt = 0; attempt < this.maxPolls; attempt += 1) {
-      const data = await this.getJson("/v2/task.listMessages", {
-        task_id: taskId,
-        order: "desc",
-        limit: 20,
-      });
-      const diagnosis = parseDiagnosis(data);
-      if (diagnosis) return { ...diagnosis, source: "manus_api", taskId };
-      throwIfStructuredOutputFailed(data, "diagnosis");
-
-      const status = latestAgentStatus(data?.messages);
-      if (status === "error") throw new Error("Manus task ended with error");
-      if (status === "waiting") throw new Error("Manus task is waiting for user input");
-      if (status === "stopped") throw new Error("Manus task stopped without structured diagnosis");
-
-      await sleep(this.pollIntervalMs);
+  async startDiagnosis(payload) {
+    if (!this.apiKey) {
+      throw new Error("MANUS_API_KEY is not configured");
     }
 
+    const created = await this.postJson("/v2/task.create", {
+      title: "ConceptMaster 오답 진단",
+      hide_in_task_list: true,
+      share_visibility: "private",
+      agent_profile: this.agentProfile,
+      message: {
+        content: [
+          {
+            type: "text",
+            text: buildDiagnosisPrompt(payload),
+          },
+        ],
+      },
+      structured_output_schema: diagnosisSchema,
+    });
+
+    if (!created?.ok || !created?.task_id) {
+      throw new Error("Manus task.create did not return task_id");
+    }
+
+    return created.task_id;
+  }
+
+  async checkDiagnosis(taskId) {
+    const data = await this.getJson("/v2/task.listMessages", {
+      task_id: taskId,
+      order: "desc",
+      limit: 20,
+    });
+    const diagnosis = parseDiagnosis(data);
+    if (diagnosis) return { ...diagnosis, source: "manus_api", taskId };
+    throwIfStructuredOutputFailed(data, "diagnosis");
+
+    const status = latestAgentStatus(data?.messages);
+    if (status === "error") throw new Error("Manus task ended with error");
+    if (status === "waiting") throw new Error("Manus task is waiting for user input");
+    if (status === "stopped") throw new Error("Manus task stopped without structured diagnosis");
+
+    return null; // Still running
+  }
+
+  async pollDiagnosis(taskId) {
+    for (let attempt = 0; attempt < this.maxPolls; attempt += 1) {
+      const diagnosis = await this.checkDiagnosis(taskId);
+      if (diagnosis) return diagnosis;
+      await sleep(this.pollIntervalMs);
+    }
     throw new Error("Manus task timed out before structured diagnosis");
+  }
+
+  async startGeneration(payload) {
+    if (!this.apiKey) {
+      throw new Error("MANUS_API_KEY is not configured");
+    }
+
+    const created = await this.postJson("/v2/task.create", {
+      title: "ConceptMaster 같은 개념 유사문항 생성",
+      hide_in_task_list: true,
+      share_visibility: "private",
+      agent_profile: this.agentProfile,
+      message: {
+        content: [
+          {
+            type: "text",
+            text: buildGenerationPrompt(payload),
+          },
+        ],
+      },
+      structured_output_schema: generatedProblemSchema,
+    });
+
+    if (!created?.ok || !created?.task_id) {
+      throw new Error("Manus task.create did not return task_id");
+    }
+
+    return created.task_id;
+  }
+
+  async checkGeneration(taskId) {
+    const data = await this.getJson("/v2/task.listMessages", {
+      task_id: taskId,
+      order: "desc",
+      limit: 20,
+    });
+    const problem = parseGeneratedProblem(data);
+    if (problem) return { ...problem, source: "manus_api", taskId };
+    throwIfStructuredOutputFailed(data, "generated problem");
+
+    const status = latestAgentStatus(data?.messages);
+    if (status === "error") throw new Error("Manus task ended with error");
+    if (status === "waiting") throw new Error("Manus task is waiting for user input");
+    if (status === "stopped") throw new Error("Manus task stopped without structured generated problem");
+
+    return null; // Still running
   }
 
   async pollGeneratedProblem(taskId) {
     for (let attempt = 0; attempt < this.maxPolls; attempt += 1) {
-      const data = await this.getJson("/v2/task.listMessages", {
-        task_id: taskId,
-        order: "desc",
-        limit: 20,
-      });
-      const problem = parseGeneratedProblem(data);
-      if (problem) return { ...problem, source: "manus_api", taskId };
-      throwIfStructuredOutputFailed(data, "generated problem");
-
-      const status = latestAgentStatus(data?.messages);
-      if (status === "error") throw new Error("Manus task ended with error");
-      if (status === "waiting") throw new Error("Manus task is waiting for user input");
-      if (status === "stopped") throw new Error("Manus task stopped without structured generated problem");
-
+      const problem = await this.checkGeneration(taskId);
+      if (problem) return problem;
       await sleep(this.pollIntervalMs);
     }
-
     throw new Error("Manus task timed out before structured generated problem");
   }
 }
