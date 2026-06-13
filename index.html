@@ -54,6 +54,25 @@
         <button id="reset-history-btn" class="view-selector-btn" style="color: #ef4444;" type="button">🗑️ 기록 초기화</button>
       </nav>
 
+      <!-- Manus API Key 설정 패널 -->
+      <section class="api-key-panel panel" style="margin: 0 24px 16px 24px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fafafa; border: 2px solid #eef1f4; border-radius: 16px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 280px;">
+          <span style="font-size: 1.4rem;">🔑</span>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex: 1;">
+            <span style="font-size: 0.85rem; font-weight: 800; color: #3c4858;">Manus API 연동 설정 (배포용)</span>
+            <input id="manus-api-key-input" type="password" placeholder="sk-..." style="padding: 8px 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; width: 100%; max-width: 380px; outline: none; transition: border-color 0.2s;" />
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div id="api-connection-status" class="status-badge" style="background: #e2e8f0; color: #475569; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;">
+            <span style="width: 8px; height: 8px; background: #64748b; border-radius: 50%; display: inline-block;" id="api-status-dot"></span>
+            <span id="api-status-text">연결 대기</span>
+          </div>
+          <button id="save-api-key-btn" class="primary-button" style="padding: 8px 16px; font-size: 0.85rem; margin: 0; background: #22c55e; border-bottom: 4px solid #15803d; border-radius: 12px;" type="button">연결</button>
+          <button id="clear-api-key-btn" class="ghost-button" style="padding: 8px 16px; font-size: 0.85rem; color: #ef4444; border: 2px solid #fee2e2; border-radius: 12px;" type="button">삭제</button>
+        </div>
+      </section>
+
       <section class="subject-switcher" aria-label="과목 선택">
         <button class="subject-card subject-card-math is-active" data-subject="math" type="button" aria-selected="true">
           <span class="subject-icon math-icon">＋−<br>×÷</span>

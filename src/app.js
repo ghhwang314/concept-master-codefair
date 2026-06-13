@@ -1,4 +1,6 @@
 import { diagnoseMistake, fallbackDiagnosis } from "./diagnosis.js";
+import { generateSimilarProblem } from "./generation.js";
+import { ManusAiClient } from "./manusClient.js";
 import {
   buildDashboardModel,
   createLearningEvent,
@@ -28,6 +30,7 @@ import { formatDate } from "./reviewScheduler.js";
 
 const STORAGE_KEY = "concept-master-codefair.learningEvents.v1";
 const GRADE_STORAGE_KEY = "concept-master-codefair.selectedGrade.v1";
+const USER_API_KEY_STORAGE_KEY = "concept-master-codefair.userApiKey.v1";
 const aiStatusLabels = {
   idle: "AI 보조 대기 중",
   waiting: "틀린 이유 정리 중",
@@ -222,6 +225,11 @@ const els = {
   distributionPanel: document.querySelector(".distribution-panel"),
   evidenceGrid: document.querySelector(".evidence-grid"),
   resetHistoryBtn: document.getElementById("reset-history-btn"),
+  apiKeyInput: document.getElementById("manus-api-key-input"),
+  saveApiKeyBtn: document.getElementById("save-api-key-btn"),
+  clearApiKeyBtn: document.getElementById("clear-api-key-btn"),
+  apiStatusDot: document.getElementById("api-status-dot"),
+  apiStatusText: document.getElementById("api-status-text"),
 };
 
 initialize();
@@ -328,6 +336,7 @@ function initialize() {
   setDemoStage("");
   hideDemoGuide();
   setActiveScreen("learn");
+  initializeApiKeySettings();
 }
 
 function organizeMenuLayout() {
@@ -1054,6 +1063,32 @@ async function handleAnswer(selectedAnswer) {
 }
 
 async function requestDiagnosis(problem, selectedAnswer, options = {}) {
+  const userApiKey = localStorage.getItem(USER_API_KEY_STORAGE_KEY);
+  if (userApiKey) {
+    try {
+      const client = new ManusAiClient({ apiKey: userApiKey });
+      const diagnosis = await diagnoseMistake({
+        problem,
+        selectedAnswer,
+        client,
+        timeoutMs: Number(options.timeoutMs || 25_000),
+      });
+      return diagnosis;
+    } catch (error) {
+      console.warn("[ConceptMaster] browser direct diagnosis fallback", error);
+      return fallbackDiagnosis({
+        problem,
+        selectedAnswer,
+        aiTrace: {
+          provider: "browser_direct",
+          path: "diagnosis",
+          fallbackReason: "browser_api_request_failed",
+          message: "브라우저에서 직접 AI 진단 요청 중 오류가 발생하여 기본 설명으로 전환했습니다.",
+        },
+      });
+    }
+  }
+
   if (isStaticHosting) {
     return fallbackDiagnosis({
       problem,
@@ -1282,6 +1317,33 @@ function handleModalSubmit() {
 }
 
 async function requestGeneratedSimilarProblem(event, options = {}) {
+  const userApiKey = localStorage.getItem(USER_API_KEY_STORAGE_KEY);
+  if (userApiKey) {
+    try {
+      const client = new ManusAiClient({ apiKey: userApiKey });
+      const sourceProblem = problems.find((p) => p.id === event.questionId);
+      const generatedProblem = await generateSimilarProblem({
+        sourceProblem,
+        diagnosis: event.aiDiagnosis,
+        sequence: learningEvents.length + 1,
+        client,
+        timeoutMs: Number(options.timeoutMs || 25_000),
+      });
+      return {
+        problem: generatedProblem,
+        reason: generatedProblem.generatedBy === "manus_api" ? "ai_generated_same_concept" : "fallback_generated_same_concept",
+      };
+    } catch (error) {
+      console.warn("[ConceptMaster] browser direct generation fallback", error);
+      const sourceProblem = problems.find((p) => p.id === event.questionId);
+      const problem = createTemplateProblem({ sourceProblem, sequence: learningEvents.length + 1 });
+      return {
+        problem,
+        reason: "fallback_generated_same_concept",
+      };
+    }
+  }
+
   if (isStaticHosting) {
     const sourceProblem = problems.find((p) => p.id === event.questionId);
     const problem = createTemplateProblem({ sourceProblem, sequence: learningEvents.length + 1 });
@@ -1396,4 +1458,94 @@ async function runJudgeDemo() {
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function initializeApiKeySettings() {
+  if (!els.apiKeyInput || !els.saveApiKeyBtn || !els.clearApiKeyBtn) return;
+
+  const savedKey = localStorage.getItem(USER_API_KEY_STORAGE_KEY);
+  if (savedKey) {
+    els.apiKeyInput.value = savedKey;
+    updateApiStatus("connected");
+  } else {
+    updateApiStatus("disconnected");
+  }
+
+  els.saveApiKeyBtn.addEventListener("click", async () => {
+    const key = els.apiKeyInput.value.trim();
+    if (!key) {
+      alert("API Key를 입력해 주세요.");
+      return;
+    }
+
+    updateApiStatus("checking");
+    try {
+      const isValid = await verifyManusApiKey(key);
+      if (isValid) {
+        localStorage.setItem(USER_API_KEY_STORAGE_KEY, key);
+        updateApiStatus("connected");
+        alert("Manus API 연결에 성공했습니다!");
+        renderDashboard();
+      } else {
+        updateApiStatus("error", "인증 실패");
+        alert("유효하지 않은 API Key입니다. 다시 확인해 주세요.");
+      }
+    } catch (error) {
+      console.error(error);
+      updateApiStatus("error", "연결 실패");
+      alert("Manus API 서버에 연결할 수 없습니다. 네트워크를 확인해 주세요.");
+    }
+  });
+
+  els.clearApiKeyBtn.addEventListener("click", () => {
+    if (confirm("연결된 API Key를 삭제하시겠습니까?")) {
+      localStorage.removeItem(USER_API_KEY_STORAGE_KEY);
+      els.apiKeyInput.value = "";
+      updateApiStatus("disconnected");
+      alert("API Key가 삭제되었습니다. 다시 Fallback 모드로 실행됩니다.");
+      renderDashboard();
+    }
+  });
+}
+
+function updateApiStatus(status, customText = "") {
+  if (!els.apiStatusDot || !els.apiStatusText) return;
+
+  if (status === "connected") {
+    els.apiStatusDot.style.background = "#22c55e";
+    els.apiStatusText.textContent = "연결 완료";
+    els.saveApiKeyBtn.disabled = true;
+    els.apiKeyInput.disabled = true;
+  } else if (status === "checking") {
+    els.apiStatusDot.style.background = "#eab308";
+    els.apiStatusText.textContent = "확인 중...";
+    els.saveApiKeyBtn.disabled = true;
+    els.apiKeyInput.disabled = true;
+  } else if (status === "error") {
+    els.apiStatusDot.style.background = "#ef4444";
+    els.apiStatusText.textContent = customText || "연결 오류";
+    els.saveApiKeyBtn.disabled = false;
+    els.apiKeyInput.disabled = false;
+  } else {
+    els.apiStatusDot.style.background = "#64748b";
+    els.apiStatusText.textContent = "연결 대기";
+    els.saveApiKeyBtn.disabled = false;
+    els.apiKeyInput.disabled = false;
+  }
+}
+
+async function verifyManusApiKey(key) {
+  const client = new ManusAiClient({ apiKey: key, requestTimeoutMs: 5000 });
+  try {
+    await client.getJson("/v2/task.listMessages", { task_id: "test_check" });
+    return true; 
+  } catch (error) {
+    if (error.status === 401) {
+      return false;
+    }
+    if (error.status && error.status !== 401) {
+      return true;
+    }
+    throw error;
+  }
 }
