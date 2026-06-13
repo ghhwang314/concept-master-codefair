@@ -1076,7 +1076,7 @@ async function requestDiagnosis(problem, selectedAnswer, options = {}) {
     if (response && response.status === "processing" && response.taskId) {
       const taskId = response.taskId;
       const startTime = Date.now();
-      const timeoutMs = options.timeoutMs || 25000;
+      const timeoutMs = options.timeoutMs || 80000;
       
       while (Date.now() - startTime < timeoutMs) {
         await delay(2000);
@@ -1335,7 +1335,7 @@ async function requestGeneratedSimilarProblem(event, options = {}) {
     if (response && response.status === "processing" && response.taskId) {
       const taskId = response.taskId;
       const startTime = Date.now();
-      const timeoutMs = options.timeoutMs || 25000;
+      const timeoutMs = options.timeoutMs || 80000;
       
       while (Date.now() - startTime < timeoutMs) {
         await delay(2000);
