@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/diagnose", "destination": "/api/index.js" },
+    { "source": "/api/generate-similar-problem", "destination": "/api/index.js" }
+  ]
+}
